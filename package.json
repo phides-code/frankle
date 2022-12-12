@@ -1,7 +1,7 @@
 {
     "name": "frankle",
     "version": "1.1.0",
-    "description": "Wordle clone",
+    "description": "word guessing game",
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
