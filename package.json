@@ -1,0 +1,21 @@
+{
+    "name": "frankle",
+    "version": "1.5.0",
+    "description": "Wordle clone",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "cd backend && npm install && npm run build && cd ../frontend && npm install && npm run build",
+        "start": "node backend/dist/index.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/phides-code/frankle2.git"
+    },
+    "author": "Philippe DeSousa",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/phides-code/frankle2/issues"
+    },
+    "homepage": "https://github.com/phides-code/frankle2#readme"
+}
