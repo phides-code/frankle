@@ -10,12 +10,12 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/phides-code/frankle2.git"
+        "url": "git+https://github.com/phides-code/frankle.git"
     },
     "author": "Philippe DeSousa",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/phides-code/frankle2/issues"
+        "url": "https://github.com/phides-code/frankle/issues"
     },
-    "homepage": "https://github.com/phides-code/frankle2#readme"
+    "homepage": "https://github.com/phides-code/frankle#readme"
 }
