@@ -12,7 +12,7 @@ interface WordState {
 
 const initialState: WordState = {
     wordObject: {
-        httpStatus: 0,
+        httpStatus: 200,
         data: '',
     },
     status: 'idle',
