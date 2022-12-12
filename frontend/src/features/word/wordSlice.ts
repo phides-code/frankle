@@ -28,7 +28,6 @@ const wordSlice = createSlice({
                 state.status = 'idle';
                 state.word = action.payload;
             })
-
             .addCase(fetchWord.rejected, (state) => {
                 state.status = 'failed';
             });
