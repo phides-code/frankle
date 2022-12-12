@@ -24,12 +24,17 @@ const getAllWords = async (req: Request, res: Response) => {
         const allWords = await db.collection(collectionName).find().toArray();
 
         return res.status(200).json({
-            status: 200,
+            httpStatus: 200,
             data: allWords,
         });
     } catch (error: any) {
         console.log('getAllWords caught error: ');
         console.log(error.message);
+
+        return res.status(500).json({
+            httpStatus: 500,
+            data: error.message,
+        });
     } finally {
         client.close();
         console.log('Disconnected.');

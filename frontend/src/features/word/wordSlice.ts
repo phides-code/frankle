@@ -1,21 +1,28 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 
-export interface WordState {
-    word: string;
+interface FetchReponseType {
+    httpStatus: number;
+    data: string;
+}
+interface WordState {
+    wordObject: FetchReponseType;
     status: 'idle' | 'loading' | 'failed';
 }
 
 const initialState: WordState = {
-    word: '',
+    wordObject: {
+        httpStatus: 0,
+        data: '',
+    },
     status: 'idle',
 };
 
 export const fetchWord = createAsyncThunk('word/fetchWord', async () => {
     const rawFetchResponse = await fetch('/api/getword');
-    const fetchResponse = await rawFetchResponse.json();
+    const fetchResponse: FetchReponseType = await rawFetchResponse.json();
 
-    return fetchResponse.data as string;
+    return fetchResponse;
 });
 
 const wordSlice = createSlice({
@@ -29,7 +36,7 @@ const wordSlice = createSlice({
             })
             .addCase(fetchWord.fulfilled, (state, action) => {
                 state.status = 'idle';
-                state.word = action.payload;
+                state.wordObject = action.payload;
             })
             .addCase(fetchWord.rejected, (state) => {
                 state.status = 'failed';
@@ -37,7 +44,6 @@ const wordSlice = createSlice({
     },
 });
 
-export const selectWord = (state: RootState) => state.word.word;
-export const selectWordStatus = (state: RootState) => state.word.status;
+export const selectWord = (state: RootState) => state.word;
 
 export default wordSlice.reducer;

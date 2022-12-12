@@ -30,12 +30,17 @@ const getWord = async (req: Request, res: Response) => {
         console.log(randomWord);
 
         return res.status(200).json({
-            status: 200,
+            httpStatus: 200,
             data: randomWord,
         });
     } catch (error: any) {
         console.log('getWord caught error: ');
         console.log(error.message);
+
+        return res.status(500).json({
+            httpStatus: 500,
+            data: error.message,
+        });
     } finally {
         client.close();
         console.log('Disconnected.');

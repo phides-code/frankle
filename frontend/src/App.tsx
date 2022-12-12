@@ -1,27 +1,32 @@
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from './app/hooks';
-import {
-    fetchWord,
-    selectWord,
-    selectWordStatus,
-} from './features/word/wordSlice';
+import { fetchWord, selectWord } from './features/word/wordSlice';
 
 const App = () => {
-    const word = useAppSelector(selectWord);
-    const wordStatus = useAppSelector(selectWordStatus);
-
     const dispatch = useAppDispatch();
+    const wordObject = useAppSelector(selectWord);
+
+    const wordFetchStatus = wordObject.status;
+    const word = wordObject.wordObject.data;
+    const httpStatus = wordObject.wordObject.httpStatus;
+    const errorState = httpStatus !== 200 || wordFetchStatus === 'failed';
 
     useEffect(() => {
-        if (wordStatus === 'idle' && word.length === 0) {
+        if (wordFetchStatus === 'idle' && word.length === 0) {
             console.log('running useEffect dispatch...');
             dispatch(fetchWord());
         }
-    });
+    }, [wordFetchStatus, word, dispatch]);
 
     return (
         <div>
-            <div>{word}</div>
+            <div>
+                {errorState ? (
+                    <>Something went wrong... click button</>
+                ) : (
+                    <>{word}</>
+                )}
+            </div>
             <button
                 onClick={() => {
                     dispatch(fetchWord());
