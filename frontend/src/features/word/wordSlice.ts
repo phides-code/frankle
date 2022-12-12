@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { RootState } from '../../app/store';
 
 export interface WordState {
     word: string;
@@ -11,8 +12,10 @@ const initialState: WordState = {
 };
 
 export const fetchWord = createAsyncThunk('word/fetchWord', async () => {
-    const fetchResponse = await fetch('/api/getword');
-    return fetchResponse.body as unknown as string;
+    const rawFetchResponse = await fetch('/api/getword');
+    const fetchResponse = await rawFetchResponse.json();
+
+    return fetchResponse.data as string;
 });
 
 const wordSlice = createSlice({
@@ -33,5 +36,8 @@ const wordSlice = createSlice({
             });
     },
 });
+
+export const selectWord = (state: RootState) => state.word.word;
+export const selectWordStatus = (state: RootState) => state.word.status;
 
 export default wordSlice.reducer;

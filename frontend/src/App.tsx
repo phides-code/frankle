@@ -1,58 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from './app/hooks';
+import {
+    fetchWord,
+    selectWord,
+    selectWordStatus,
+} from './features/word/wordSlice';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+    const word = useAppSelector(selectWord);
+    const wordStatus = useAppSelector(selectWordStatus);
+
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        if (wordStatus === 'idle' && word.length === 0) {
+            console.log('running useEffect dispatch...');
+            dispatch(fetchWord());
+        }
+    });
+
+    return (
+        <div>
+            <div>{word}</div>
+            <button
+                onClick={() => {
+                    dispatch(fetchWord());
+                }}
+            >
+                new word
+            </button>
+        </div>
+    );
+};
 
 export default App;
