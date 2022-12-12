@@ -1,6 +1,6 @@
 {
     "name": "frankle",
-    "version": "1.5.0",
+    "version": "1.1.0",
     "description": "Wordle clone",
     "main": "index.js",
     "scripts": {
