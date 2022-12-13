@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { NUM_OF_GUESSES } from '../constants';
 import { fetchWord, selectWord } from '../features/word/wordSlice';
 import GuessRow from './GuessRow';
+import Keyboard from './Keyboard';
 
 const MainGrid = () => {
     const dispatch = useAppDispatch();
@@ -29,29 +30,32 @@ const MainGrid = () => {
 
     return (
         <Wrapper>
-            <div>
-                {errorState ? (
-                    <>Something went wrong... click button</>
-                ) : isLoading ? (
-                    <>...</>
-                ) : (
-                    <>
+            {errorState ? (
+                <>Something went wrong... please reload</>
+            ) : isLoading ? (
+                <>...</>
+            ) : (
+                <>
+                    <GuessRows>
                         {rows.map(() => (
                             <GuessRow
                                 key={Math.floor(Math.random() * 999999)}
                             />
                         ))}
-                    </>
-                )}
-            </div>
+                    </GuessRows>
+                    <Keyboard />
+                </>
+            )}
         </Wrapper>
     );
 };
 
 const Wrapper = styled.div`
-    border: 2px solid lime;
+    border: 2px solid darkgray;
     display: flex;
     flex-direction: column;
 `;
+
+const GuessRows = styled.div``;
 
 export default MainGrid;
