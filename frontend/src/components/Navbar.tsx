@@ -11,11 +11,11 @@ const Navbar = () => {
 };
 
 const StyledLink = styled(Link)`
-    color: black;
+    color: white;
     text-decoration: none;
 
     &:active {
-        color: blue;
+        color: red;
     }
 `;
 

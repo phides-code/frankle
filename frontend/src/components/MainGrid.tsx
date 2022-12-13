@@ -1,6 +1,9 @@
 import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from './app/hooks';
-import { fetchWord, selectWord } from './features/word/wordSlice';
+import styled from 'styled-components';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { NUM_OF_GUESSES } from '../constants';
+import { fetchWord, selectWord } from '../features/word/wordSlice';
+import GuessRow from './GuessRow';
 
 const MainGrid = () => {
     const dispatch = useAppDispatch();
@@ -12,6 +15,8 @@ const MainGrid = () => {
     const errorState = httpStatus !== 200 || wordFetchStatus === 'failed';
     const isLoading = wordFetchStatus === 'loading';
 
+    const rows: number[] = Array(NUM_OF_GUESSES).fill(0);
+
     useEffect(() => {
         if (wordFetchStatus === 'idle' && word.length === 0) {
             console.log('running useEffect dispatch...');
@@ -19,27 +24,34 @@ const MainGrid = () => {
         }
     }, [wordFetchStatus, word, dispatch]);
 
+    console.log('*** got word: ');
+    console.log(word);
+
     return (
-        <div>
+        <Wrapper>
             <div>
                 {errorState ? (
                     <>Something went wrong... click button</>
                 ) : isLoading ? (
                     <>...</>
                 ) : (
-                    <>{word}</>
+                    <>
+                        {rows.map(() => (
+                            <GuessRow
+                                key={Math.floor(Math.random() * 999999)}
+                            />
+                        ))}
+                    </>
                 )}
             </div>
-            <button
-                onClick={() => {
-                    dispatch(fetchWord());
-                }}
-                disabled={isLoading}
-            >
-                new word
-            </button>
-        </div>
+        </Wrapper>
     );
 };
+
+const Wrapper = styled.div`
+    border: 2px solid lime;
+    display: flex;
+    flex-direction: column;
+`;
 
 export default MainGrid;
