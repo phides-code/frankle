@@ -7,12 +7,24 @@ const Keyboard = () => {
         ['Z', 'X', 'C', 'V', 'B', 'N', 'M', '✔️'],
     ];
 
+    const handleKeyPress = (event: React.MouseEvent<HTMLButtonElement>) => {
+        const letter: HTMLButtonElement = event.currentTarget;
+        console.log('***: ');
+        console.log(letter.value);
+    };
+
     return (
         <Wrapper>
             {keyboardLayout.map((keyBoardRow) => (
                 <Row key={keyBoardRow[0]}>
                     {keyBoardRow.map((keyboardKey) => (
-                        <Key key={keyboardKey}>{keyboardKey}</Key>
+                        <Key
+                            key={keyboardKey}
+                            onClick={handleKeyPress}
+                            value={keyboardKey}
+                        >
+                            {keyboardKey}
+                        </Key>
                     ))}
                 </Row>
             ))}
@@ -28,6 +40,7 @@ const Wrapper = styled.div`
     justify-content: space-between;
     align-items: stretch;
     align-content: stretch;
+    margin-top: 0.4rem;
 `;
 
 const Row = styled.div`
@@ -37,15 +50,17 @@ const Row = styled.div`
     justify-content: space-between;
     align-items: center;
     align-content: stretch;
-    margin-top: 0.4rem;
+    margin-bottom: 0.4rem;
 `;
 
 const Key = styled.button`
-    margin-right: 0.4rem;
+    margin-right: 0.2rem;
+    margin-left: 0.2rem;
     font-size: 1.2rem;
     height: 3rem;
     background: black;
     color: white;
+    min-width: 1.8rem;
 `;
 
 export default Keyboard;
