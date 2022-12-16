@@ -10,7 +10,7 @@ const MainGrid = () => {
     const wordObject = useAppSelector(selectWord);
     const useAndCreateRef = useRef(createRef());
 
-    const letterBoxRefs = Array(NUM_OF_GUESSES)
+    const letterBoxRefs: HTMLDivElement[][] = Array(NUM_OF_GUESSES)
         .fill(0)
         .map((row) => new Array(WORD_LENGTH).fill(useAndCreateRef));
     const wordFetchStatus = wordObject.status;
@@ -47,7 +47,7 @@ const MainGrid = () => {
                             >
                                 {letters.map((_, letter: number) => (
                                     <StyledLetterBox
-                                        ref={(el) =>
+                                        ref={(el: HTMLDivElement) =>
                                             (letterBoxRefs[row][letter] = el)
                                         }
                                         key={Math.floor(Math.random() * 999999)}
@@ -56,14 +56,7 @@ const MainGrid = () => {
                             </GuessRowWrapper>
                         ))}
                     </GuessRows>
-                    <Keyboard />
-                    <button
-                        onClick={() => {
-                            letterBoxRefs[3][2].innerText = 'F';
-                        }}
-                    >
-                        hello
-                    </button>
+                    <Keyboard letterBoxRefs={letterBoxRefs} />
                 </>
             )}
         </Wrapper>

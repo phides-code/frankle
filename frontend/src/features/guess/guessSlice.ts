@@ -7,8 +7,8 @@ interface GuessState {
 }
 
 const initialState: GuessState = {
-    currentRow: 1,
-    currentLetterPosition: 1,
+    currentRow: 0,
+    currentLetterPosition: 0,
 };
 
 const guessSlice = createSlice({
@@ -31,5 +31,11 @@ const guessSlice = createSlice({
 });
 
 export const selectGuessStatus = (state: RootState) => state.guess;
+export const {
+    incrementLetterPosition,
+    decrementLetterPosition,
+    resetLetterPosition,
+    incrementRow,
+} = guessSlice.actions;
 
 export default guessSlice.reducer;

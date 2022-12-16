@@ -1,16 +1,69 @@
+import { MouseEvent } from 'react';
 import styled from 'styled-components';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import {
+    decrementLetterPosition,
+    incrementLetterPosition,
+    selectGuessStatus,
+} from '../features/guess/guessSlice';
+import { WORD_LENGTH } from '../constants';
 
-const Keyboard = () => {
-    const keyboardLayout = [
-        ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
-        ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', '<'],
-        ['Z', 'X', 'C', 'V', 'B', 'N', 'M', '✔️'],
-    ];
+const keyboardLayout = [
+    ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+    ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', '<'],
+    ['Z', 'X', 'C', 'V', 'B', 'N', 'M', '✔️'],
+];
+interface KeyboardProps {
+    letterBoxRefs: HTMLDivElement[][];
+}
 
-    const handleKeyPress = (event: React.MouseEvent<HTMLButtonElement>) => {
-        const letter: HTMLButtonElement = event.currentTarget;
-        console.log('***: ');
-        console.log(letter.value);
+const Keyboard = ({ letterBoxRefs }: KeyboardProps) => {
+    const guessStatus = useAppSelector(selectGuessStatus);
+    const dispatch = useAppDispatch();
+
+    const { currentRow, currentLetterPosition } = guessStatus;
+
+    const printLetter = (letter: string) => {
+        const currentLetterBox =
+            letterBoxRefs[currentRow][currentLetterPosition];
+
+        if (currentLetterPosition < WORD_LENGTH) {
+            currentLetterBox.innerText = letter;
+
+            dispatch(incrementLetterPosition());
+        }
+    };
+
+    const doBackspace = () => {
+        const previousLetterBox =
+            letterBoxRefs[currentRow][currentLetterPosition - 1];
+
+        if (currentLetterPosition > 0) {
+            previousLetterBox.innerText = '';
+            dispatch(decrementLetterPosition());
+        }
+    };
+
+    const processGuess = () => {
+        if (currentLetterPosition === WORD_LENGTH) {
+            console.log('processing guess');
+            // check validity
+        }
+    };
+
+    const handleKeyPress = (event: MouseEvent<HTMLButtonElement>) => {
+        const keyPressed: HTMLButtonElement = event.currentTarget;
+
+        switch (keyPressed.value) {
+            case '✔️':
+                processGuess();
+                break;
+            case '<':
+                doBackspace();
+                break;
+            default:
+                printLetter(keyPressed.value);
+        }
     };
 
     return (
