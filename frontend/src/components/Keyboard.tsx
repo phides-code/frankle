@@ -59,8 +59,9 @@ const Key = styled.button`
     font-size: 1.2rem;
     height: 3rem;
     background: black;
-    color: white;
+    color: darkgray;
     min-width: 1.8rem;
+    border: 1px solid darkgray;
 `;
 
 export default Keyboard;

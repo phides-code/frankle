@@ -11,7 +11,7 @@ const Navbar = () => {
 };
 
 const StyledLink = styled(Link)`
-    color: white;
+    color: darkgray;
     text-decoration: none;
 
     &:active {

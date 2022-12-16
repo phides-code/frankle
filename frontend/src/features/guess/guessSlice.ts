@@ -22,7 +22,7 @@ const guessSlice = createSlice({
             state.currentLetterPosition -= 1;
         },
         resetLetterPosition: (state) => {
-            state.currentLetterPosition = 1;
+            state.currentLetterPosition = 0;
         },
         incrementRow: (state) => {
             state.currentRow += 1;
