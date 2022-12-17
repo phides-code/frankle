@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useAppSelector } from '../app/hooks';
 import { selectGuessStatus } from '../features/guess/guessSlice';
+import { WORD_LENGTH } from '../constants';
 
 const Message = () => {
     const guessStatus = useAppSelector(selectGuessStatus);
@@ -10,14 +11,17 @@ const Message = () => {
     const [message, setMessage] = useState<string>('');
 
     useEffect(() => {
-        if (validGuess === false) {
+        if (
+            validGuess === false &&
+            guessStatus.currentLetterPosition === WORD_LENGTH
+        ) {
             setMessage('Invalid guess');
 
             setTimeout(() => {
                 setMessage('');
             }, 3000);
         }
-    }, [validGuess]);
+    }, [validGuess, guessStatus]);
 
     return <Wrapper>{message}</Wrapper>;
 };

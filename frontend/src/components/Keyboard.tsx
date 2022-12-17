@@ -5,6 +5,7 @@ import {
     decrementLetterPosition,
     fetchValidity,
     incrementLetterPosition,
+    resetGuessValidity,
     selectGuessStatus,
 } from '../features/guess/guessSlice';
 import { WORD_LENGTH } from '../constants';
@@ -12,7 +13,7 @@ import { WORD_LENGTH } from '../constants';
 const keyboardLayout = [
     ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
     ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', '<'],
-    ['Z', 'X', 'C', 'V', 'B', 'N', 'M', '✔️'],
+    ['Z', 'X', 'C', 'V', 'B', 'N', 'M', 'OK'],
 ];
 interface KeyboardProps {
     letterBoxRefs: HTMLDivElement[][];
@@ -23,6 +24,39 @@ const Keyboard = ({ letterBoxRefs }: KeyboardProps) => {
     const guessStatus = useAppSelector(selectGuessStatus);
 
     const { currentRow, currentLetterPosition } = guessStatus;
+    const validGuess = guessStatus.invalidGuessObject.data;
+
+    let okKeyColor: string = '';
+
+    if (validGuess) {
+        okKeyColor = 'green';
+    } else if (validGuess === false) {
+        okKeyColor = 'red';
+    } else {
+        okKeyColor = 'darkgray';
+    }
+
+    const assembleGuess = () => {
+        let guess = '';
+        letterBoxRefs[currentRow].forEach((letterBox) => {
+            guess += letterBox.innerText;
+        });
+
+        return guess;
+    };
+
+    const sendGuess = async () => {
+        const guess = assembleGuess();
+
+        console.log('Sending guess: ' + guess);
+    };
+
+    const processGuess = async () => {
+        const guess = assembleGuess();
+
+        console.log('processing guess: ' + guess);
+        await dispatch(fetchValidity(guess));
+    };
 
     const printLetter = (letter: string) => {
         const currentLetterBox =
@@ -32,6 +66,10 @@ const Keyboard = ({ letterBoxRefs }: KeyboardProps) => {
             currentLetterBox.innerText = letter;
 
             dispatch(incrementLetterPosition());
+
+            if (currentLetterPosition === WORD_LENGTH - 1) {
+                processGuess();
+            }
         }
     };
 
@@ -40,28 +78,17 @@ const Keyboard = ({ letterBoxRefs }: KeyboardProps) => {
             letterBoxRefs[currentRow][currentLetterPosition - 1];
 
         if (currentLetterPosition > 0) {
+            dispatch(resetGuessValidity());
             previousLetterBox.innerText = '';
             dispatch(decrementLetterPosition());
-        }
-    };
-
-    const processGuess = async () => {
-        if (currentLetterPosition === WORD_LENGTH) {
-            let guess = '';
-            letterBoxRefs[currentRow].forEach((letterBox) => {
-                guess += letterBox.innerText;
-            });
-
-            console.log('processing guess: ' + guess);
-            await dispatch(fetchValidity(guess));
         }
     };
 
     const handleKeyPress = (event: MouseEvent<HTMLButtonElement>) => {
         const keyPressed: HTMLButtonElement = event.currentTarget;
         switch (keyPressed.value) {
-            case '✔️':
-                processGuess();
+            case 'OK':
+                sendGuess();
                 break;
             case '<':
                 doBackspace();
@@ -75,15 +102,38 @@ const Keyboard = ({ letterBoxRefs }: KeyboardProps) => {
         <Wrapper>
             {keyboardLayout.map((keyBoardRow) => (
                 <Row key={keyBoardRow[0]}>
-                    {keyBoardRow.map((keyboardKey) => (
-                        <Key
-                            key={keyboardKey}
-                            onClick={handleKeyPress}
-                            value={keyboardKey}
-                        >
-                            {keyboardKey}
-                        </Key>
-                    ))}
+                    {keyBoardRow.map((keyboardKey) => {
+                        if (keyboardKey === 'OK') {
+                            return (
+                                <Key
+                                    key={keyboardKey}
+                                    onClick={handleKeyPress}
+                                    value={keyboardKey}
+                                    style={{
+                                        color: okKeyColor,
+                                    }}
+                                    disabled={
+                                        !(guessStatus.status === 'idle') ||
+                                        !validGuess
+                                    }
+                                >
+                                    {guessStatus.status === 'loading'
+                                        ? '...'
+                                        : 'OK'}
+                                </Key>
+                            );
+                        }
+
+                        return (
+                            <Key
+                                key={keyboardKey}
+                                onClick={handleKeyPress}
+                                value={keyboardKey}
+                            >
+                                {keyboardKey}
+                            </Key>
+                        );
+                    })}
                 </Row>
             ))}
         </Wrapper>

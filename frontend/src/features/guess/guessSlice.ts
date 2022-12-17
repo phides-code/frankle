@@ -54,6 +54,9 @@ const guessSlice = createSlice({
         incrementRow: (state) => {
             state.currentRow += 1;
         },
+        resetGuessValidity: (state) => {
+            state.invalidGuessObject.data = null;
+        },
     },
     extraReducers(builder) {
         builder
@@ -76,6 +79,7 @@ export const {
     decrementLetterPosition,
     resetLetterPosition,
     incrementRow,
+    resetGuessValidity,
 } = guessSlice.actions;
 
 export default guessSlice.reducer;
