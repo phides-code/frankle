@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { NUM_OF_GUESSES, WORD_LENGTH } from '../constants';
 import { fetchWord, selectWord } from '../features/word/wordSlice';
 import Keyboard from './Keyboard';
+import Message from './Message';
 
 const MainGrid = () => {
     const dispatch = useAppDispatch();
@@ -33,33 +34,39 @@ const MainGrid = () => {
     console.log(word);
 
     return (
-        <Wrapper>
-            {errorState ? (
-                <>Something went wrong... please reload</>
-            ) : isLoading ? (
-                <>...</>
-            ) : (
-                <>
-                    <GuessRows>
-                        {rows.map((_, row: number) => (
-                            <GuessRowWrapper
-                                key={Math.floor(Math.random() * 999999)}
-                            >
-                                {letters.map((_, letter: number) => (
-                                    <StyledLetterBox
-                                        ref={(el: HTMLDivElement) =>
-                                            (letterBoxRefs[row][letter] = el)
-                                        }
-                                        key={Math.floor(Math.random() * 999999)}
-                                    />
-                                ))}
-                            </GuessRowWrapper>
-                        ))}
-                    </GuessRows>
-                    <Keyboard letterBoxRefs={letterBoxRefs} />
-                </>
-            )}
-        </Wrapper>
+        <>
+            <Wrapper>
+                {errorState ? (
+                    <>Something went wrong... please reload</>
+                ) : isLoading ? (
+                    <>...</>
+                ) : (
+                    <>
+                        <GuessRows>
+                            {rows.map((_, row: number) => (
+                                <GuessRowWrapper
+                                    key={Math.floor(Math.random() * 999999)}
+                                >
+                                    {letters.map((_, letter: number) => (
+                                        <StyledLetterBox
+                                            ref={(el: HTMLDivElement) =>
+                                                (letterBoxRefs[row][letter] =
+                                                    el)
+                                            }
+                                            key={Math.floor(
+                                                Math.random() * 999999
+                                            )}
+                                        />
+                                    ))}
+                                </GuessRowWrapper>
+                            ))}
+                        </GuessRows>
+                        <Keyboard letterBoxRefs={letterBoxRefs} />
+                    </>
+                )}
+            </Wrapper>
+            <Message />
+        </>
     );
 };
 

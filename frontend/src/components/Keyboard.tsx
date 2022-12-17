@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import {
     decrementLetterPosition,
+    fetchValidity,
     incrementLetterPosition,
     selectGuessStatus,
 } from '../features/guess/guessSlice';
@@ -18,8 +19,8 @@ interface KeyboardProps {
 }
 
 const Keyboard = ({ letterBoxRefs }: KeyboardProps) => {
-    const guessStatus = useAppSelector(selectGuessStatus);
     const dispatch = useAppDispatch();
+    const guessStatus = useAppSelector(selectGuessStatus);
 
     const { currentRow, currentLetterPosition } = guessStatus;
 
@@ -44,16 +45,20 @@ const Keyboard = ({ letterBoxRefs }: KeyboardProps) => {
         }
     };
 
-    const processGuess = () => {
+    const processGuess = async () => {
         if (currentLetterPosition === WORD_LENGTH) {
-            console.log('processing guess');
-            // check validity
+            let guess = '';
+            letterBoxRefs[currentRow].forEach((letterBox) => {
+                guess += letterBox.innerText;
+            });
+
+            console.log('processing guess: ' + guess);
+            await dispatch(fetchValidity(guess));
         }
     };
 
     const handleKeyPress = (event: MouseEvent<HTMLButtonElement>) => {
         const keyPressed: HTMLButtonElement = event.currentTarget;
-
         switch (keyPressed.value) {
             case '✔️':
                 processGuess();

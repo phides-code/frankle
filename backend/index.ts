@@ -10,12 +10,14 @@ dotenv.config();
 const app: Express = express();
 const port = process.env.PORT;
 
+app.use(express.json());
+
 // Have Node serve the files for our built React app
 app.use(express.static(path.resolve(__dirname, '../../frontend/build')));
 
 app.get('/api/getword', getWord);
 app.get('/api/getallwords', getAllWords);
-app.post('/api/checkValidity', checkValidity);
+app.post('/api/checkvalidity', checkValidity);
 
 app.get('*', (req: Request, res: Response) => {
     res.sendFile(path.resolve(__dirname, '../../frontend/build', 'index.html'));
