@@ -7,16 +7,18 @@ interface FetchReponseType {
 }
 
 interface GuessState {
+    guesses: string[];
     currentRow: number;
     currentLetterPosition: number;
-    invalidGuessObject: FetchReponseType;
+    guessValidityObject: FetchReponseType;
     status: 'idle' | 'loading' | 'failed';
 }
 
 const initialState: GuessState = {
+    guesses: [],
     currentRow: 0,
     currentLetterPosition: 0,
-    invalidGuessObject: {
+    guessValidityObject: {
         httpStatus: 200,
         data: null,
     },
@@ -55,7 +57,10 @@ const guessSlice = createSlice({
             state.currentRow += 1;
         },
         resetGuessValidity: (state) => {
-            state.invalidGuessObject.data = null;
+            state.guessValidityObject.data = null;
+        },
+        addGuess: (state, action) => {
+            state.guesses.push(action.payload);
         },
     },
     extraReducers(builder) {
@@ -65,7 +70,7 @@ const guessSlice = createSlice({
             })
             .addCase(fetchValidity.fulfilled, (state, action) => {
                 state.status = 'idle';
-                state.invalidGuessObject = action.payload;
+                state.guessValidityObject = action.payload;
             })
             .addCase(fetchValidity.rejected, (state) => {
                 state.status = 'failed';
@@ -80,6 +85,7 @@ export const {
     resetLetterPosition,
     incrementRow,
     resetGuessValidity,
+    addGuess,
 } = guessSlice.actions;
 
 export default guessSlice.reducer;

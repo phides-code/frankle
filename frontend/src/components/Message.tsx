@@ -6,7 +6,7 @@ import { WORD_LENGTH } from '../constants';
 
 const Message = () => {
     const guessStatus = useAppSelector(selectGuessStatus);
-    const validGuess = guessStatus.invalidGuessObject.data;
+    const validGuess = guessStatus.guessValidityObject.data;
 
     const [message, setMessage] = useState<string>('');
 

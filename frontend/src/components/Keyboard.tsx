@@ -2,13 +2,17 @@ import { MouseEvent } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import {
+    addGuess,
     decrementLetterPosition,
     fetchValidity,
     incrementLetterPosition,
+    incrementRow,
     resetGuessValidity,
+    resetLetterPosition,
     selectGuessStatus,
 } from '../features/guess/guessSlice';
-import { WORD_LENGTH } from '../constants';
+import { WORD_LENGTH, NUM_OF_GUESSES } from '../constants';
+import { selectWord } from '../features/word/wordSlice';
 
 const keyboardLayout = [
     ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
@@ -22,9 +26,11 @@ interface KeyboardProps {
 const Keyboard = ({ letterBoxRefs }: KeyboardProps) => {
     const dispatch = useAppDispatch();
     const guessStatus = useAppSelector(selectGuessStatus);
+    const wordObject = useAppSelector(selectWord);
+    const word = wordObject.wordObject.data;
 
     const { currentRow, currentLetterPosition } = guessStatus;
-    const validGuess = guessStatus.invalidGuessObject.data;
+    const validGuess = guessStatus.guessValidityObject.data;
 
     let okKeyColor: string = '';
 
@@ -36,6 +42,26 @@ const Keyboard = ({ letterBoxRefs }: KeyboardProps) => {
         okKeyColor = 'darkgray';
     }
 
+    const colorize = (guess: string) => {
+        const guessArr = guess.split('');
+        const wordArr = word.split('');
+
+        guessArr.forEach((guessLetter, i) => {
+            const thisLetterBox = letterBoxRefs[currentRow][i];
+
+            if (wordArr[i] === guessLetter) {
+                thisLetterBox.style.background = 'green';
+                thisLetterBox.style.color = 'white';
+            } else if (wordArr.includes(guessLetter)) {
+                thisLetterBox.style.background = 'darkgoldenrod';
+                thisLetterBox.style.color = 'white';
+            } else {
+                thisLetterBox.style.background = '#282828';
+                thisLetterBox.style.color = 'white';
+            }
+        });
+    };
+
     const assembleGuess = () => {
         let guess = '';
         letterBoxRefs[currentRow].forEach((letterBox) => {
@@ -45,16 +71,35 @@ const Keyboard = ({ letterBoxRefs }: KeyboardProps) => {
         return guess;
     };
 
-    const sendGuess = async () => {
-        const guess = assembleGuess();
-
-        console.log('Sending guess: ' + guess);
+    const endGame = (endType: 'win' | 'loss') => {
+        console.log('game over: ' + endType);
+        // show reset button
     };
 
-    const processGuess = async () => {
+    const goToNextRow = () => {
+        dispatch(incrementRow());
+        dispatch(resetLetterPosition());
+    };
+
+    const checkGuess = () => {
         const guess = assembleGuess();
 
-        console.log('processing guess: ' + guess);
+        dispatch(addGuess(guess));
+        colorize(guess);
+
+        if (guess === word) {
+            endGame('win');
+        } else if (currentRow === NUM_OF_GUESSES - 1) {
+            endGame('loss');
+        } else {
+            goToNextRow();
+        }
+    };
+
+    const validateGuess = async () => {
+        const guess = assembleGuess();
+
+        console.log('validating guess: ' + guess);
         await dispatch(fetchValidity(guess));
     };
 
@@ -68,7 +113,7 @@ const Keyboard = ({ letterBoxRefs }: KeyboardProps) => {
             dispatch(incrementLetterPosition());
 
             if (currentLetterPosition === WORD_LENGTH - 1) {
-                processGuess();
+                validateGuess();
             }
         }
     };
@@ -88,7 +133,7 @@ const Keyboard = ({ letterBoxRefs }: KeyboardProps) => {
         const keyPressed: HTMLButtonElement = event.currentTarget;
         switch (keyPressed.value) {
             case 'OK':
-                sendGuess();
+                checkGuess();
                 break;
             case '<':
                 doBackspace();
