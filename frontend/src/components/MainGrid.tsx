@@ -8,8 +8,8 @@ import Message from './Message';
 
 const MainGrid = () => {
     const dispatch = useAppDispatch();
-    const wordObject = useAppSelector(selectWord);
     const useAndCreateRef = useRef(createRef());
+    const wordObject = useAppSelector(selectWord);
 
     const letterBoxRefs: HTMLDivElement[][] = Array(NUM_OF_GUESSES)
         .fill(0)

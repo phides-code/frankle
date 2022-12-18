@@ -1,4 +1,4 @@
-import { MouseEvent } from 'react';
+import { MouseEvent, useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import {
@@ -29,12 +29,20 @@ const Keyboard = ({ letterBoxRefs }: KeyboardProps) => {
     const wordObject = useAppSelector(selectWord);
     const word = wordObject.wordObject.data;
 
+    const [gameOver, setGameOver] = useState<boolean>(false);
+
     const { currentRow, currentLetterPosition } = guessStatus;
     const validGuess = guessStatus.guessValidityObject.data;
+    const guesses = guessStatus.guesses;
 
     let okKeyColor: string = '';
 
-    if (validGuess) {
+    if (
+        validGuess &&
+        guessStatus.status === 'idle' &&
+        currentLetterPosition === WORD_LENGTH &&
+        !gameOver
+    ) {
         okKeyColor = 'green';
     } else if (validGuess === false) {
         okKeyColor = 'red';
@@ -42,25 +50,28 @@ const Keyboard = ({ letterBoxRefs }: KeyboardProps) => {
         okKeyColor = 'darkgray';
     }
 
-    const colorize = (guess: string) => {
-        const guessArr = guess.split('');
-        const wordArr = word.split('');
+    const colorize = useCallback(
+        (guess: string, row: number) => {
+            const guessArr = guess.split('');
+            const wordArr = word.split('');
 
-        guessArr.forEach((guessLetter, i) => {
-            const thisLetterBox = letterBoxRefs[currentRow][i];
+            guessArr.forEach((guessLetter, i) => {
+                const thisLetterBox = letterBoxRefs[row][i];
 
-            if (wordArr[i] === guessLetter) {
-                thisLetterBox.style.background = 'green';
-                thisLetterBox.style.color = 'white';
-            } else if (wordArr.includes(guessLetter)) {
-                thisLetterBox.style.background = 'darkgoldenrod';
-                thisLetterBox.style.color = 'white';
-            } else {
-                thisLetterBox.style.background = '#282828';
-                thisLetterBox.style.color = 'white';
-            }
-        });
-    };
+                if (wordArr[i] === guessLetter) {
+                    thisLetterBox.style.background = 'green';
+                    thisLetterBox.style.color = 'white';
+                } else if (wordArr.includes(guessLetter)) {
+                    thisLetterBox.style.background = 'darkgoldenrod';
+                    thisLetterBox.style.color = 'white';
+                } else {
+                    thisLetterBox.style.background = '#282828';
+                    thisLetterBox.style.color = 'white';
+                }
+            });
+        },
+        [letterBoxRefs, word]
+    );
 
     const assembleGuess = () => {
         let guess = '';
@@ -73,6 +84,7 @@ const Keyboard = ({ letterBoxRefs }: KeyboardProps) => {
 
     const endGame = (endType: 'win' | 'loss') => {
         console.log('game over: ' + endType);
+        setGameOver(true);
         // show reset button
     };
 
@@ -85,7 +97,7 @@ const Keyboard = ({ letterBoxRefs }: KeyboardProps) => {
         const guess = assembleGuess();
 
         dispatch(addGuess(guess));
-        colorize(guess);
+        colorize(guess, currentRow);
 
         if (guess === word) {
             endGame('win');
@@ -130,18 +142,45 @@ const Keyboard = ({ letterBoxRefs }: KeyboardProps) => {
     };
 
     const handleKeyPress = (event: MouseEvent<HTMLButtonElement>) => {
-        const keyPressed: HTMLButtonElement = event.currentTarget;
-        switch (keyPressed.value) {
-            case 'OK':
-                checkGuess();
-                break;
-            case '<':
-                doBackspace();
-                break;
-            default:
-                printLetter(keyPressed.value);
+        if (!gameOver) {
+            const keyPressed: HTMLButtonElement = event.currentTarget;
+            switch (keyPressed.value) {
+                case 'OK':
+                    checkGuess();
+                    break;
+                case '<':
+                    doBackspace();
+                    break;
+                default:
+                    printLetter(keyPressed.value);
+            }
         }
     };
+
+    useEffect(() => {
+        const loadGuess = (guess: string, row: number) => {
+            console.log('Loading guess on row ' + row + ': ' + guess);
+            const guessArr = guess.split('');
+
+            guessArr.forEach((guessLetter, i) => {
+                const thisLetterBox = letterBoxRefs[row][i];
+
+                thisLetterBox.innerText = guessLetter;
+            });
+        };
+
+        if (guesses.length > 0 && word.length > 0) {
+            console.log('Loading existing guesses: ');
+            console.log(guesses);
+
+            guesses.forEach((guess, row) => {
+                loadGuess(guess, row);
+                colorize(guess, row);
+            });
+
+            dispatch(resetLetterPosition());
+        }
+    }, [guesses, word.length, colorize, dispatch, letterBoxRefs]);
 
     return (
         <Wrapper>
