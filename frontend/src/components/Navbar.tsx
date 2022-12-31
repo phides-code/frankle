@@ -1,10 +1,23 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { useAppDispatch } from '../app/hooks';
+import { resetGuessState } from '../features/guess/guessSlice';
+import { fetchWord } from '../features/word/wordSlice';
 
 const Navbar = () => {
+    const dispatch = useAppDispatch();
+    const resetGame = () => {
+        console.log('resetting game');
+        dispatch(resetGuessState());
+        dispatch(fetchWord());
+    };
+
     return (
         <Wrapper>
             <StyledLink to='/'>Frankle</StyledLink>
+            <StyledResetLink to='/' onClick={resetGame}>
+                Reset
+            </StyledResetLink>
             <StyledLink to='/about'>About</StyledLink>
         </Wrapper>
     );
@@ -18,6 +31,8 @@ const StyledLink = styled(Link)`
         color: red;
     }
 `;
+
+const StyledResetLink = styled(StyledLink)``;
 
 const Wrapper = styled.div`
     display: flex;

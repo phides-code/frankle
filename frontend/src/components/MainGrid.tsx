@@ -1,19 +1,18 @@
-import { createRef, useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { NUM_OF_GUESSES, WORD_LENGTH } from '../constants';
 import { fetchWord, selectWord } from '../features/word/wordSlice';
 import Keyboard from './Keyboard';
 import Message from './Message';
+import { selectGuessStatus } from '../features/guess/guessSlice';
 
 const MainGrid = () => {
     const dispatch = useAppDispatch();
-    const useAndCreateRef = useRef(createRef());
     const wordObject = useAppSelector(selectWord);
+    const guessStatus = useAppSelector(selectGuessStatus);
 
-    const letterBoxRefs: HTMLDivElement[][] = Array(NUM_OF_GUESSES)
-        .fill(0)
-        .map((row) => new Array(WORD_LENGTH).fill(useAndCreateRef));
+    const board = guessStatus.board;
     const wordFetchStatus = wordObject.status;
     const word = wordObject.wordObject.data;
     const httpStatus = wordObject.wordObject.httpStatus;
@@ -45,23 +44,26 @@ const MainGrid = () => {
                         <GuessRows>
                             {rows.map((_, row: number) => (
                                 <GuessRowWrapper
-                                    key={Math.floor(Math.random() * 999999)}
+                                    key={Math.floor(Math.random() * 99999999)}
                                 >
-                                    {letters.map((_, letter: number) => (
-                                        <StyledLetterBox
-                                            ref={(el: HTMLDivElement) =>
-                                                (letterBoxRefs[row][letter] =
-                                                    el)
-                                            }
-                                            key={Math.floor(
-                                                Math.random() * 999999
-                                            )}
-                                        />
-                                    ))}
+                                    {letters.map(
+                                        (_, letterPosition: number) => (
+                                            <StyledLetterBox
+                                                key={Math.floor(
+                                                    Math.random() * 99999999
+                                                )}
+                                            >
+                                                {
+                                                    board[row][letterPosition]
+                                                        .letter
+                                                }
+                                            </StyledLetterBox>
+                                        )
+                                    )}
                                 </GuessRowWrapper>
                             ))}
                         </GuessRows>
-                        <Keyboard letterBoxRefs={letterBoxRefs} />
+                        <Keyboard />
                     </>
                 )}
             </Wrapper>

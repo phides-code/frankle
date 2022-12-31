@@ -1,13 +1,19 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
+import { NUM_OF_GUESSES, WORD_LENGTH } from '../../constants';
 
 interface FetchReponseType {
     httpStatus: number;
     data: boolean | null;
 }
 
+interface LetterBox {
+    letter: string;
+    color: string;
+}
+
 interface GuessState {
-    guesses: string[];
+    board: LetterBox[][];
     currentRow: number;
     currentLetterPosition: number;
     guessValidityObject: FetchReponseType;
@@ -15,7 +21,9 @@ interface GuessState {
 }
 
 const initialState: GuessState = {
-    guesses: [],
+    board: Array.from({ length: NUM_OF_GUESSES }, () =>
+        Array(WORD_LENGTH).fill({ letter: '', color: '' })
+    ),
     currentRow: 0,
     currentLetterPosition: 0,
     guessValidityObject: {
@@ -44,6 +52,25 @@ const guessSlice = createSlice({
     name: 'guess',
     initialState,
     reducers: {
+        updateBoard: (state, action) => {
+            // put one letter in a square
+            const { row, letterPosition, value } = action.payload;
+            state.board[row][letterPosition].letter = value;
+        },
+        colorizeAndAdvance: (state, action) => {
+            const { guess, word } = action.payload;
+
+            console.log('comparing answer: ' + word);
+            console.log(' and guess: ');
+            console.log(guess);
+
+            // call this when OK is pressed
+            // check each letter with the answer word and colorize
+            // increment row
+            // reset letter position
+            // reset guess validity
+        },
+        /////////////////////
         incrementLetterPosition: (state) => {
             state.currentLetterPosition += 1;
         },
@@ -59,8 +86,8 @@ const guessSlice = createSlice({
         resetGuessValidity: (state) => {
             state.guessValidityObject.data = null;
         },
-        addGuess: (state, action) => {
-            state.guesses.push(action.payload);
+        resetGuessState: () => {
+            return initialState;
         },
     },
     extraReducers(builder) {
@@ -85,7 +112,10 @@ export const {
     resetLetterPosition,
     incrementRow,
     resetGuessValidity,
-    addGuess,
+    // addGuess,
+    resetGuessState,
+    updateBoard,
+    colorizeAndAdvance,
 } = guessSlice.actions;
 
 export default guessSlice.reducer;
