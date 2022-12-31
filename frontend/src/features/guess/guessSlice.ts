@@ -9,7 +9,8 @@ interface FetchReponseType {
 
 interface LetterBox {
     letter: string;
-    color: string;
+    bgColor: string;
+    fgColor: string;
 }
 
 interface GuessState {
@@ -22,7 +23,7 @@ interface GuessState {
 
 const initialState: GuessState = {
     board: Array.from({ length: NUM_OF_GUESSES }, () =>
-        Array(WORD_LENGTH).fill({ letter: '', color: '' })
+        Array(WORD_LENGTH).fill({ letter: '', bgColor: '', fgColor: '' })
     ),
     currentRow: 0,
     currentLetterPosition: 0,
@@ -52,25 +53,17 @@ const guessSlice = createSlice({
     name: 'guess',
     initialState,
     reducers: {
-        updateBoard: (state, action) => {
-            // put one letter in a square
-            const { row, letterPosition, value } = action.payload;
-            state.board[row][letterPosition].letter = value;
+        updateLetterBoxLetter: (state, action) => {
+            // put one letter in a LetterBox
+            const { row, letterPosition, letter } = action.payload;
+            state.board[row][letterPosition].letter = letter;
         },
-        colorizeAndAdvance: (state, action) => {
-            const { guess, word } = action.payload;
-
-            console.log('comparing answer: ' + word);
-            console.log(' and guess: ');
-            console.log(guess);
-
-            // call this when OK is pressed
-            // check each letter with the answer word and colorize
-            // increment row
-            // reset letter position
-            // reset guess validity
+        updateLetterBoxColor: (state, action) => {
+            // colorize one LetterBox
+            const { row, letterPosition, bgColor } = action.payload;
+            state.board[row][letterPosition].bgColor = bgColor;
+            state.board[row][letterPosition].fgColor = 'white';
         },
-        /////////////////////
         incrementLetterPosition: (state) => {
             state.currentLetterPosition += 1;
         },
@@ -112,10 +105,9 @@ export const {
     resetLetterPosition,
     incrementRow,
     resetGuessValidity,
-    // addGuess,
     resetGuessState,
-    updateBoard,
-    colorizeAndAdvance,
+    updateLetterBoxLetter,
+    updateLetterBoxColor,
 } = guessSlice.actions;
 
 export default guessSlice.reducer;

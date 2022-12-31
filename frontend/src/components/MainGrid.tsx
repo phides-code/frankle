@@ -7,6 +7,11 @@ import Keyboard from './Keyboard';
 import Message from './Message';
 import { selectGuessStatus } from '../features/guess/guessSlice';
 
+interface StyledLetterBoxProps {
+    bgColor: string;
+    fgColor: string;
+}
+
 const MainGrid = () => {
     const dispatch = useAppDispatch();
     const wordObject = useAppSelector(selectWord);
@@ -47,18 +52,25 @@ const MainGrid = () => {
                                     key={Math.floor(Math.random() * 99999999)}
                                 >
                                     {letters.map(
-                                        (_, letterPosition: number) => (
-                                            <StyledLetterBox
-                                                key={Math.floor(
-                                                    Math.random() * 99999999
-                                                )}
-                                            >
-                                                {
-                                                    board[row][letterPosition]
-                                                        .letter
-                                                }
-                                            </StyledLetterBox>
-                                        )
+                                        (_, letterPosition: number) => {
+                                            const thisLetterBox =
+                                                board[row][letterPosition];
+                                            return (
+                                                <StyledLetterBox
+                                                    key={Math.floor(
+                                                        Math.random() * 99999999
+                                                    )}
+                                                    bgColor={
+                                                        thisLetterBox.bgColor
+                                                    }
+                                                    fgColor={
+                                                        thisLetterBox.fgColor
+                                                    }
+                                                >
+                                                    {thisLetterBox.letter}
+                                                </StyledLetterBox>
+                                            );
+                                        }
                                     )}
                                 </GuessRowWrapper>
                             ))}
@@ -86,7 +98,9 @@ const GuessRowWrapper = styled.div`
     height: 100%;
 `;
 
-const StyledLetterBox = styled.div`
+const StyledLetterBox = styled.div<StyledLetterBoxProps>`
+    background-color: ${(props) => props.bgColor};
+    color: ${(props) => props.fgColor};
     border: 2px solid darkgray;
     margin: 0.4rem;
     min-height: 4rem;
