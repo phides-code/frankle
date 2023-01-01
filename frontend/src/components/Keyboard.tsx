@@ -1,4 +1,9 @@
-import { MouseEvent, useCallback, useEffect } from 'react';
+import {
+    MouseEvent,
+    useCallback,
+    useEffect,
+    // useState
+} from 'react';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import {
@@ -27,6 +32,8 @@ const Keyboard = () => {
     const guessStatus = useAppSelector(selectGuessStatus);
     const wordObject = useAppSelector(selectWord);
     const gameStatus = useAppSelector(selectGameStatus);
+
+    // const [keyColors, setkeyColors] = useState
 
     const word = wordObject.wordObject.data;
     const { currentRow, currentLetterPosition } = guessStatus;
