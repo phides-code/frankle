@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import { useEffect, useMemo, useState } from 'react';
+// import styled from 'styled-components';
 import { useAppSelector } from '../app/hooks';
 import { selectGuessStatus } from '../features/guess/guessSlice';
 import { WORD_LENGTH } from '../constants';
@@ -10,45 +10,66 @@ const Message = () => {
     const guessStatus = useAppSelector(selectGuessStatus);
     const wordObject = useAppSelector(selectWord);
     const gameStatus = useAppSelector(selectGameStatus);
-    const [message, setMessage] = useState<string>('');
 
     const word = wordObject.wordObject.data;
-
     const validGuess = guessStatus.guessValidityObject.data;
+
+    const noMessage = useMemo(() => ({ text: '', color: '' }), []);
+    const invalidGuessMessage = useMemo(
+        () => ({ text: 'Invalid guess', color: 'red' }),
+        []
+    );
+    const lossMessage = useMemo(() => ({ text: word, color: 'red' }), [word]);
+    const winMessage = useMemo(
+        () => ({ text: 'Well done!', color: 'green' }),
+        []
+    );
+
+    const [message, setMessage] = useState<{
+        text: string;
+        color: string;
+    }>(noMessage);
 
     useEffect(() => {
         if (
             validGuess === false &&
             guessStatus.currentLetterPosition === WORD_LENGTH
         ) {
-            setMessage('Invalid guess');
+            setMessage(invalidGuessMessage);
 
             setTimeout(() => {
-                setMessage('');
+                setMessage(noMessage);
             }, 3000);
         }
-    }, [validGuess, guessStatus]);
+    }, [validGuess, guessStatus, invalidGuessMessage, noMessage]);
 
     useEffect(() => {
         switch (gameStatus.gameResult) {
             case 'loss':
-                // use red here
-                setMessage(word);
+                setMessage(lossMessage);
                 break;
             case 'win':
-                // use green here
-                setMessage('Well done.');
+                setMessage(winMessage);
                 break;
             default:
-                setMessage('');
+                setMessage(noMessage);
         }
-    }, [gameStatus.gameResult, word]);
+    }, [gameStatus.gameResult, word, lossMessage, noMessage, winMessage]);
 
-    return <Wrapper>{message}</Wrapper>;
+    // return <Wrapper>{message.text}</Wrapper>;
+    return (
+        <div
+            style={{
+                color: message.color,
+            }}
+        >
+            {message.text}
+        </div>
+    );
 };
 
-const Wrapper = styled.div`
-    color: red;
-`;
+// const Wrapper = styled.div`
+//     color: red;
+// `;
 
 export default Message;
