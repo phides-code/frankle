@@ -1,4 +1,4 @@
-import { MouseEvent, useCallback, useEffect, useState } from 'react';
+import { MouseEvent, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import {
@@ -14,7 +14,7 @@ import {
 } from '../features/guess/guessSlice';
 import { WORD_LENGTH, NUM_OF_GUESSES } from '../constants';
 import { selectWord } from '../features/word/wordSlice';
-import { selectGameStatus } from '../features/game/gameSlice';
+import { endGame, selectGameStatus } from '../features/game/gameSlice';
 
 const keyboardLayout = [
     ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
@@ -29,9 +29,6 @@ const Keyboard = () => {
     const gameStatus = useAppSelector(selectGameStatus);
 
     const word = wordObject.wordObject.data;
-
-    // const [gameOver, setGameOver] = useState<boolean>(false);
-
     const { currentRow, currentLetterPosition } = guessStatus;
     const validGuess = guessStatus.guessValidityObject.data;
 
@@ -59,11 +56,6 @@ const Keyboard = () => {
 
         return guess;
     }, [currentRow, guessStatus.board]);
-
-    const endGame = (endType: 'win' | 'loss') => {
-        console.log('game over: ' + endType);
-        setGameOver(true);
-    };
 
     const goToNextRow = () => {
         dispatch(incrementRow());
@@ -96,9 +88,9 @@ const Keyboard = () => {
         }
 
         if (guess === word) {
-            endGame('win');
+            dispatch(endGame('win'));
         } else if (currentRow === NUM_OF_GUESSES - 1) {
-            endGame('loss');
+            dispatch(endGame('loss'));
         } else {
             goToNextRow();
         }
@@ -133,7 +125,7 @@ const Keyboard = () => {
     };
 
     const handleKeyPress = (event: MouseEvent<HTMLButtonElement>) => {
-        if (!gameOver) {
+        if (!gameStatus.gameOver) {
             const keyPressed: HTMLButtonElement = event.currentTarget;
             switch (keyPressed.value) {
                 case 'OK':
@@ -159,40 +151,6 @@ const Keyboard = () => {
             validateGuess();
         }
     }, [currentLetterPosition, assembleGuess, dispatch]);
-
-    // useEffect(() => {
-    //     const loadGuess = (guess: string, row: number) => {
-    //         console.log('Loading guess on row ' + row + ': ' + guess);
-    //         const guessArr = guess.split('');
-
-    //         guessArr.forEach((guessLetter, i) => {
-    //             const thisLetterBox = letterBoxRefs[row][i];
-
-    //             thisLetterBox.innerText = guessLetter;
-    //         });
-    //     };
-
-    //     if (guesses.length > 0 && word.length > 0) {
-    //         console.log('Loading existing guesses: ');
-    //         console.log(guesses);
-
-    //         guesses.forEach((guess, row) => {
-    //             loadGuess(guess, row);
-    //             colorize(guess, row);
-    //         });
-
-    //         dispatch(resetLetterPosition());
-    //     } else if (guesses.length === 0) {
-    //         // remove colour from all squares
-    //         letterBoxRefs.forEach((letterBoxRow) => {
-    //             letterBoxRow.forEach((letterBox) => {
-    //                 letterBox.innerText = '';
-    //                 letterBox.style.color = 'darkgrey';
-    //                 letterBox.style.background = 'black';
-    //             });
-    //         });
-    //     }
-    // }, [guesses, word.length, colorize, dispatch, letterBoxRefs]);
 
     return (
         <Wrapper>
