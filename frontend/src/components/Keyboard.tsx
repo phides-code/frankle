@@ -14,6 +14,7 @@ import {
 } from '../features/guess/guessSlice';
 import { WORD_LENGTH, NUM_OF_GUESSES } from '../constants';
 import { selectWord } from '../features/word/wordSlice';
+import { selectGameStatus } from '../features/game/gameSlice';
 
 const keyboardLayout = [
     ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
@@ -25,9 +26,11 @@ const Keyboard = () => {
     const dispatch = useAppDispatch();
     const guessStatus = useAppSelector(selectGuessStatus);
     const wordObject = useAppSelector(selectWord);
+    const gameStatus = useAppSelector(selectGameStatus);
+
     const word = wordObject.wordObject.data;
 
-    const [gameOver, setGameOver] = useState<boolean>(false);
+    // const [gameOver, setGameOver] = useState<boolean>(false);
 
     const { currentRow, currentLetterPosition } = guessStatus;
     const validGuess = guessStatus.guessValidityObject.data;
@@ -38,7 +41,7 @@ const Keyboard = () => {
         validGuess &&
         guessStatus.status === 'idle' &&
         currentLetterPosition === WORD_LENGTH &&
-        !gameOver
+        !gameStatus.gameOver
     ) {
         okKeyColor = 'green';
     } else if (validGuess === false) {

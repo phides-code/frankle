@@ -3,11 +3,13 @@ import styled from 'styled-components';
 import { useAppDispatch } from '../app/hooks';
 import { resetGuessState } from '../features/guess/guessSlice';
 import { fetchWord } from '../features/word/wordSlice';
+import { resetGameState } from '../features/game/gameSlice';
 
 const Navbar = () => {
     const dispatch = useAppDispatch();
     const resetGame = () => {
         console.log('resetting game');
+        dispatch(resetGameState());
         dispatch(resetGuessState());
         dispatch(fetchWord());
     };

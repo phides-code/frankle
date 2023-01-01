@@ -3,12 +3,16 @@ import styled from 'styled-components';
 import { useAppSelector } from '../app/hooks';
 import { selectGuessStatus } from '../features/guess/guessSlice';
 import { WORD_LENGTH } from '../constants';
+import { selectWord } from '../features/word/wordSlice';
 
 const Message = () => {
     const guessStatus = useAppSelector(selectGuessStatus);
-    const validGuess = guessStatus.guessValidityObject.data;
-
+    const wordObject = useAppSelector(selectWord);
     const [message, setMessage] = useState<string>('');
+
+    const word = wordObject.wordObject.data;
+
+    const validGuess = guessStatus.guessValidityObject.data;
 
     useEffect(() => {
         if (
