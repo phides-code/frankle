@@ -217,6 +217,7 @@ const Keyboard = () => {
                                 style={{
                                     backgroundColor: bgColor,
                                     color: fgColor,
+                                    transition: 'background-color 1s, color 1s',
                                 }}
                             >
                                 {keyboardKey}
@@ -251,13 +252,13 @@ const Row = styled.div`
 `;
 
 const Key = styled.button`
-    margin-right: 0.2rem;
-    margin-left: 0.2rem;
+    margin-right: 0.1rem;
+    margin-left: 0.1rem;
     font-size: 1.2rem;
     height: 3rem;
     background: black;
     color: darkgray;
-    min-width: 1.8rem;
+    min-width: 2.1rem;
     border: 1px solid darkgray;
 `;
 

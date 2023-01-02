@@ -17,19 +17,19 @@ const Message = () => {
     const validGuess = guessStatus.guessValidityObject.data;
 
     const formatTime = (timeInMs: number) => {
-        const thisTime = moment.duration(timeInMs);
+        const duration = moment.duration(timeInMs);
         let timeString: string = '';
 
         if (timeInMs > 3600000) {
-            timeString += thisTime.hours().toString() + ':';
+            timeString += duration.hours().toString().padStart(2, '0') + ':';
         }
 
         timeString +=
-            thisTime.minutes().toString() +
+            duration.minutes().toString().padStart(2, '0') +
             ':' +
-            thisTime.seconds().toString() +
+            duration.seconds().toString().padStart(2, '0') +
             ':' +
-            thisTime.milliseconds().toString();
+            duration.milliseconds().toString().padStart(3, '0');
 
         return timeString;
     };
@@ -41,7 +41,10 @@ const Message = () => {
         []
     );
 
-    const lossMessage = useMemo(() => ({ text: word, color: 'red' }), [word]);
+    const lossMessage = useMemo(
+        () => ({ text: 'The word was ' + word, color: 'red' }),
+        [word]
+    );
 
     const winMessage = useMemo(() => {
         const { startTime, endTime } = times;
@@ -49,14 +52,10 @@ const Message = () => {
         let thisGameTime: string = '';
 
         if (!!startTime && !!endTime) {
-            console.log('endTime: ' + endTime);
-            console.log('startTime: ' + startTime);
-            console.log('diff: ');
-            console.log((endTime - startTime).toString());
             thisGameTime = formatTime(endTime - startTime);
         }
         return {
-            text: 'Well done! Your time: ' + thisGameTime,
+            text: 'Well done! Your time was ' + thisGameTime,
             color: 'green',
         };
     }, [times]);
@@ -95,6 +94,7 @@ const Message = () => {
     return (
         <div
             style={{
+                marginTop: '0.5rem',
                 color: message.color,
             }}
         >

@@ -66,6 +66,10 @@ const MainGrid = () => {
                                                     fgColor={
                                                         thisLetterBox.fgColor
                                                     }
+                                                    style={{
+                                                        transition:
+                                                            'background-color 1s, color 1s',
+                                                    }}
                                                 >
                                                     {thisLetterBox.letter}
                                                 </StyledLetterBox>

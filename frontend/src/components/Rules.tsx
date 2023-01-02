@@ -5,7 +5,7 @@ const Rules = () => {
         <Wrapper>
             <div>No repeating letters in any one word.</div>
             <InnerWrapper>
-                Plurals, verbs, and proper names are all possible.
+                Plurals, verbs, some proper names and profanities are possible.
             </InnerWrapper>
             <InnerWrapper>
                 The word list may include glaring omissions. Send word requests
