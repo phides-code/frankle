@@ -4,6 +4,7 @@ import { useAppDispatch } from '../app/hooks';
 import { resetGuessState } from '../features/guess/guessSlice';
 import { fetchWord } from '../features/word/wordSlice';
 import { resetGameState } from '../features/game/gameSlice';
+import { resetLetterKeysState } from '../features/letterKeys/letterKeysSlice';
 
 const Navbar = () => {
     const dispatch = useAppDispatch();
@@ -12,6 +13,7 @@ const Navbar = () => {
         dispatch(resetGameState());
         dispatch(resetGuessState());
         dispatch(fetchWord());
+        dispatch(resetLetterKeysState());
     };
 
     return (

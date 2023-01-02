@@ -1,9 +1,4 @@
-import {
-    MouseEvent,
-    useCallback,
-    useEffect,
-    // useState
-} from 'react';
+import { MouseEvent, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import {
@@ -20,6 +15,11 @@ import {
 import { WORD_LENGTH, NUM_OF_GUESSES } from '../constants';
 import { selectWord } from '../features/word/wordSlice';
 import { endGame, selectGameStatus } from '../features/game/gameSlice';
+import {
+    LetterKeysState,
+    colorizeLetterkey,
+    selectLetterKeyStatus,
+} from '../features/letterKeys/letterKeysSlice';
 
 const keyboardLayout = [
     ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
@@ -32,8 +32,7 @@ const Keyboard = () => {
     const guessStatus = useAppSelector(selectGuessStatus);
     const wordObject = useAppSelector(selectWord);
     const gameStatus = useAppSelector(selectGameStatus);
-
-    // const [keyColors, setkeyColors] = useState
+    const letterKeyStatus = useAppSelector(selectLetterKeyStatus);
 
     const word = wordObject.wordObject.data;
     const { currentRow, currentLetterPosition } = guessStatus;
@@ -89,6 +88,12 @@ const Keyboard = () => {
                 updateLetterBoxColor({
                     row: currentRow,
                     letterPosition: i,
+                    bgColor: bgColor,
+                })
+            );
+            dispatch(
+                colorizeLetterkey({
+                    letterKey: thisLetter as keyof LetterKeysState['colors'],
                     bgColor: bgColor,
                 })
             );
@@ -186,11 +191,25 @@ const Keyboard = () => {
                             );
                         }
 
+                        const bgColor =
+                            letterKeyStatus.colors[
+                                keyboardKey as keyof LetterKeysState['colors']
+                            ]?.bgColor;
+
+                        const fgColor =
+                            letterKeyStatus.colors[
+                                keyboardKey as keyof LetterKeysState['colors']
+                            ]?.fgColor;
+
                         return (
                             <Key
                                 key={keyboardKey}
                                 onClick={handleKeyPress}
                                 value={keyboardKey}
+                                style={{
+                                    backgroundColor: bgColor,
+                                    color: fgColor,
+                                }}
                             >
                                 {keyboardKey}
                             </Key>
