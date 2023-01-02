@@ -1,5 +1,5 @@
 import express, { Express, Request, Response } from 'express';
-import dotenv from 'dotenv';
+import * as dotenv from 'dotenv';
 import getWord from './handlers/getWord';
 import getAllWords from './handlers/getAllWords';
 import checkValidity from './handlers/checkValidity';

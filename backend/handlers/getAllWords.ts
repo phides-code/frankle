@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { MongoClient, MongoClientOptions } from 'mongodb';
-import dotenv from 'dotenv';
+import * as dotenv from 'dotenv';
 
 dotenv.config();
 
