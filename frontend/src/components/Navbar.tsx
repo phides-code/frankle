@@ -22,7 +22,7 @@ const Navbar = () => {
             <StyledResetLink to='/' onClick={resetGame}>
                 Reset
             </StyledResetLink>
-            <StyledLink to='/about'>About</StyledLink>
+            <StyledLink to='/rules'>Rules</StyledLink>
         </Wrapper>
     );
 };

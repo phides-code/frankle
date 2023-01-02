@@ -3,6 +3,7 @@ import wordReducer from '../features/word/wordSlice';
 import guessReducer from '../features/guess/guessSlice';
 import gameReducer from '../features/game/gameSlice';
 import letterKeysReducer from '../features/letterKeys/letterKeysSlice';
+import timeReducer from '../features/time/timeSlice';
 
 export const store = configureStore({
     reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
         guess: guessReducer,
         game: gameReducer,
         letterKeys: letterKeysReducer,
+        time: timeReducer,
     },
 });
 

@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import styled from 'styled-components';
-import About from './components/About';
+import Rules from './components/Rules';
 import MainGrid from './components/MainGrid';
 import Navbar from './components/Navbar';
 
@@ -11,7 +11,7 @@ const App = () => {
                 <Navbar />
                 <Routes>
                     <Route path='/' element={<MainGrid />} />
-                    <Route path='/about' element={<About />} />
+                    <Route path='/rules' element={<Rules />} />
                 </Routes>
             </BrowserRouter>
         </Wrapper>

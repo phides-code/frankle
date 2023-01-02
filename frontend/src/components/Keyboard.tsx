@@ -20,6 +20,7 @@ import {
     colorizeLetterkey,
     selectLetterKeyStatus,
 } from '../features/letterKeys/letterKeysSlice';
+import { setEndTime, setStartTime } from '../features/time/timeSlice';
 
 const keyboardLayout = [
     ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
@@ -69,6 +70,11 @@ const Keyboard = () => {
     };
 
     const checkGuess = () => {
+        if (currentRow === 0) {
+            // start the clock
+            dispatch(setStartTime(Date.now()));
+        }
+
         const guess = assembleGuess();
         console.log('checking guess: ' + guess);
 
@@ -101,6 +107,8 @@ const Keyboard = () => {
 
         if (guess === word) {
             dispatch(endGame('win'));
+            // stop the clock
+            dispatch(setEndTime(Date.now()));
         } else if (currentRow === NUM_OF_GUESSES - 1) {
             dispatch(endGame('loss'));
         } else {
