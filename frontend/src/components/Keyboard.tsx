@@ -247,26 +247,31 @@ const Row = styled.div`
     flex-wrap: nowrap;
     flex-shrink: 0;
     /* justify-content: space-between; */
+    justify-content: center;
     /* align-items: center; */
     /* align-content: stretch; */
+    /* align-content: center; */
     margin-bottom: 0.4rem;
-    margin-left: 0.2rem;
-    margin-right: 0.2rem;
+    /* margin-left: 0.2rem;
+    margin-right: 0.2rem; */
     /* max-width: 2rem; */
     /* border: 1px solid lime; */
 `;
 
 const Key = styled.button`
     /* flex-shrink: 0; */
-    /* display: flex; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
     flex: 1;
     margin-right: 0.1rem;
     margin-left: 0.1rem;
-    font-size: larger;
+    font-size: large;
     height: 3rem;
     background: black;
     color: darkgray;
     /* width: 100%; */
+    max-width: 2.2rem;
     border: 1px solid darkgray;
 `;
 
