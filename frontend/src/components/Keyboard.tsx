@@ -260,9 +260,11 @@ const Row = styled.div`
 
 const Key = styled.button`
     /* flex-shrink: 0; */
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    /* display: flex; */
+    /* justify-content: center;
+    align-items: center; */
+    /* display: inline-block; */
+    padding: 0;
     flex: 1;
     margin-right: 0.1rem;
     margin-left: 0.1rem;
@@ -271,8 +273,8 @@ const Key = styled.button`
     background: black;
     color: darkgray;
     /* width: 100%; */
-    max-width: 2rem;
-    width: auto;
+    /* max-width: 2rem; */
+    /* width: auto; */
     border: 1px solid darkgray;
 `;
 
