@@ -271,7 +271,7 @@ const Key = styled.button`
     background: black;
     color: darkgray;
     /* width: 100%; */
-    max-width: 2.2rem;
+    max-width: 2rem;
     border: 1px solid darkgray;
 `;
 
