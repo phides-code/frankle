@@ -234,7 +234,7 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    flex-shrink: 0;
+    /* flex-shrink: 0; */
     /* justify-content: space-between; */
     /* align-items: stretch; */
     /* align-content: stretch; */
@@ -253,18 +253,19 @@ const Row = styled.div`
     margin-left: 0.2rem;
     margin-right: 0.2rem;
     /* max-width: 2rem; */
-    border: 1px solid lime;
+    /* border: 1px solid lime; */
 `;
 
 const Key = styled.button`
     /* flex-shrink: 0; */
+    flex: 1;
     margin-right: 0.1rem;
     margin-left: 0.1rem;
     font-size: 1.2rem;
     height: 3rem;
     background: black;
     color: darkgray;
-    width: 100%;
+    /* width: 100%; */
     border: 1px solid darkgray;
 `;
 
