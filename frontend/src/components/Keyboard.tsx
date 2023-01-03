@@ -244,13 +244,14 @@ const Row = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
+    flex-shrink: 0;
     /* justify-content: space-between; */
     /* align-items: center; */
     /* align-content: stretch; */
     margin-bottom: 0.4rem;
     margin-left: 0.2rem;
     margin-right: 0.2rem;
-    max-width: 24rem;
+    /* max-width: 2rem; */
 `;
 
 const Key = styled.button`
