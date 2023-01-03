@@ -234,10 +234,6 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    /* flex-shrink: 0; */
-    /* justify-content: space-between; */
-    /* align-items: stretch; */
-    /* align-content: stretch; */
     margin-top: 0.4rem;
 `;
 
@@ -246,24 +242,11 @@ const Row = styled.div`
     flex-direction: row;
     flex-wrap: nowrap;
     flex-shrink: 0;
-    /* justify-content: space-between; */
     justify-content: center;
-    /* align-items: center; */
-    /* align-content: stretch; */
-    /* align-content: center; */
     margin-bottom: 0.4rem;
-    /* margin-left: 0.2rem;
-    margin-right: 0.2rem; */
-    /* max-width: 2rem; */
-    /* border: 1px solid lime; */
 `;
 
 const Key = styled.button`
-    /* flex-shrink: 0; */
-    /* display: flex; */
-    /* justify-content: center;
-    align-items: center; */
-    /* display: inline-block; */
     padding: 0;
     flex: 1;
     margin-right: 0.1rem;
@@ -272,11 +255,6 @@ const Key = styled.button`
     height: 3rem;
     background: black;
     color: darkgray;
-    /* width: 100%; */
-    /* max-width: 2rem; */
-    /* width: auto; */
-    /* border: 1px solid darkgray; */
-    /* outline: none; */
 `;
 
 export default Keyboard;
