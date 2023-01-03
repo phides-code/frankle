@@ -244,7 +244,7 @@ const Row = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    flex-shrink: 0;
+    /* flex-shrink: 0; */
     /* justify-content: space-between; */
     /* align-items: center; */
     /* align-content: stretch; */
@@ -255,6 +255,7 @@ const Row = styled.div`
 `;
 
 const Key = styled.button`
+    flex-shrink: 0;
     margin-right: 0.1rem;
     margin-left: 0.1rem;
     font-size: 1.2rem;
