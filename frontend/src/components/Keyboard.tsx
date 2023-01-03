@@ -253,6 +253,7 @@ const Row = styled.div`
     margin-left: 0.2rem;
     margin-right: 0.2rem;
     /* max-width: 2rem; */
+    border: 1px solid lime;
 `;
 
 const Key = styled.button`
