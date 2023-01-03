@@ -46,6 +46,9 @@ const Wrapper = styled.div`
     align-items: stretch;
     align-content: stretch;
     margin-bottom: 1rem;
+    margin-top: 1rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
 `;
 
 export default Navbar;

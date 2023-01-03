@@ -249,6 +249,8 @@ const Row = styled.div`
     align-items: center;
     align-content: stretch;
     margin-bottom: 0.4rem;
+    margin-left: 0.2rem;
+    margin-right: 0.2rem;
 `;
 
 const Key = styled.button`
@@ -258,7 +260,7 @@ const Key = styled.button`
     height: 3rem;
     background: black;
     color: darkgray;
-    min-width: 2.1rem;
+    width: 100%;
     border: 1px solid darkgray;
 `;
 

@@ -19,11 +19,10 @@ const App = () => {
 };
 
 const Wrapper = styled.div`
-    padding-top: 1rem;
     display: flex;
     flex-direction: column;
-    max-width: 24rem;
-    min-width: 24rem;
+    width: 100vw;
+    max-width: 25rem;
     margin: 0 auto;
 `;
 
