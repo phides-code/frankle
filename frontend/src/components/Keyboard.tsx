@@ -234,6 +234,7 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
+    flex-shrink: 0;
     /* justify-content: space-between; */
     /* align-items: stretch; */
     /* align-content: stretch; */
@@ -255,7 +256,7 @@ const Row = styled.div`
 `;
 
 const Key = styled.button`
-    flex-shrink: 0;
+    /* flex-shrink: 0; */
     margin-right: 0.1rem;
     margin-left: 0.1rem;
     font-size: 1.2rem;
