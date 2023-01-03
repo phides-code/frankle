@@ -262,7 +262,7 @@ const Key = styled.button`
     flex: 1;
     margin-right: 0.1rem;
     margin-left: 0.1rem;
-    /* font-size: larger; */
+    font-size: larger;
     height: 3rem;
     background: black;
     color: darkgray;
