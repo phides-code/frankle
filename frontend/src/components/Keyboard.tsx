@@ -250,6 +250,7 @@ const Row = styled.div`
     margin-bottom: 0.4rem;
     margin-left: 0.2rem;
     margin-right: 0.2rem;
+    max-width: 24rem;
 `;
 
 const Key = styled.button`
