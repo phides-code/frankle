@@ -257,7 +257,7 @@ const Row = styled.div`
 `;
 
 const Key = styled.button`
-    /* flex-shrink: 0; */
+    flex-shrink: 0;
     flex: 1;
     margin-right: 0.1rem;
     margin-left: 0.1rem;
