@@ -231,7 +231,8 @@ const Keyboard = () => {
 };
 
 const Wrapper = styled.div`
-    width: 100%;
+    border: 1px solid red;
+    /* width: 100%; */
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
