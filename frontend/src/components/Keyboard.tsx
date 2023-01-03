@@ -231,14 +231,12 @@ const Keyboard = () => {
 };
 
 const Wrapper = styled.div`
-    border: 1px solid red;
-    /* width: 100%; */
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    justify-content: space-between;
-    align-items: stretch;
-    align-content: stretch;
+    /* justify-content: space-between; */
+    /* align-items: stretch; */
+    /* align-content: stretch; */
     margin-top: 0.4rem;
 `;
 
@@ -246,9 +244,9 @@ const Row = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: space-between;
-    align-items: center;
-    align-content: stretch;
+    /* justify-content: space-between; */
+    /* align-items: center; */
+    /* align-content: stretch; */
     margin-bottom: 0.4rem;
     margin-left: 0.2rem;
     margin-right: 0.2rem;
