@@ -275,7 +275,8 @@ const Key = styled.button`
     /* width: 100%; */
     /* max-width: 2rem; */
     /* width: auto; */
-    border: 1px solid darkgray;
+    /* border: 1px solid darkgray; */
+    /* outline: none; */
 `;
 
 export default Keyboard;
