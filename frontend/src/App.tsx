@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Rules from './components/Rules';
 import MainGrid from './components/MainGrid';
 import Navbar from './components/Navbar';
+import HighScores from './components/HighScores';
 
 const App = () => {
     return (
@@ -11,6 +12,7 @@ const App = () => {
                 <Navbar />
                 <Routes>
                     <Route path='/' element={<MainGrid />} />
+                    <Route path='/highscores' element={<HighScores />} />
                     <Route path='/rules' element={<Rules />} />
                 </Routes>
             </BrowserRouter>

@@ -6,6 +6,7 @@ import {
     fetchValidity,
     incrementLetterPosition,
     incrementRow,
+    resetGuessState,
     resetGuessValidity,
     resetLetterPosition,
     selectGuessStatus,
@@ -13,19 +14,26 @@ import {
     updateLetterBoxLetter,
 } from '../features/guess/guessSlice';
 import { WORD_LENGTH, NUM_OF_GUESSES } from '../constants';
-import { selectWord } from '../features/word/wordSlice';
-import { endGame, selectGameStatus } from '../features/game/gameSlice';
+import { fetchWord, selectWord } from '../features/word/wordSlice';
+import {
+    endGame,
+    resetGameState,
+    selectGameStatus,
+} from '../features/game/gameSlice';
 import {
     LetterKeysState,
     colorizeLetterkey,
+    resetLetterKeysState,
     selectLetterKeyStatus,
 } from '../features/letterKeys/letterKeysSlice';
 import { setEndTime, setStartTime } from '../features/time/timeSlice';
+import resetIcon from '../reset.svg';
+import greenResetIcon from '../reset-green.svg';
 
 const keyboardLayout = [
     ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
     ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', '<'],
-    ['Z', 'X', 'C', 'V', 'B', 'N', 'M', 'OK'],
+    ['reset', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'OK'],
 ];
 
 const Keyboard = () => {
@@ -144,9 +152,20 @@ const Keyboard = () => {
         }
     };
 
+    const resetGame = () => {
+        console.log('resetting game');
+        dispatch(resetGameState());
+        dispatch(resetGuessState());
+        dispatch(fetchWord());
+        dispatch(resetLetterKeysState());
+    };
+
     const handleKeyPress = (event: MouseEvent<HTMLButtonElement>) => {
-        if (!gameStatus.gameOver) {
-            const keyPressed: HTMLButtonElement = event.currentTarget;
+        const keyPressed: HTMLButtonElement = event.currentTarget;
+
+        if (keyPressed.value === 'reset') {
+            resetGame();
+        } else if (!gameStatus.gameOver) {
             switch (keyPressed.value) {
                 case 'OK':
                     checkGuess();
@@ -189,12 +208,31 @@ const Keyboard = () => {
                                     disabled={
                                         !(guessStatus.status === 'idle') ||
                                         !validGuess ||
-                                        currentLetterPosition !== WORD_LENGTH
+                                        currentLetterPosition !== WORD_LENGTH ||
+                                        gameStatus.gameOver
                                     }
                                 >
                                     {guessStatus.status === 'loading'
                                         ? '...'
                                         : 'OK'}
+                                </Key>
+                            );
+                        }
+                        if (keyboardKey === 'reset') {
+                            return (
+                                <Key
+                                    key={keyboardKey}
+                                    onClick={handleKeyPress}
+                                    value='reset'
+                                >
+                                    <img
+                                        src={
+                                            gameStatus.gameOver
+                                                ? greenResetIcon
+                                                : resetIcon
+                                        }
+                                        alt='reset'
+                                    />
                                 </Key>
                             );
                         }
@@ -219,6 +257,7 @@ const Keyboard = () => {
                                     color: fgColor,
                                     transition: 'background-color 1s, color 1s',
                                 }}
+                                disabled={gameStatus.gameOver}
                             >
                                 {keyboardKey}
                             </Key>
