@@ -4,6 +4,7 @@ import guessReducer from '../features/guess/guessSlice';
 import gameReducer from '../features/game/gameSlice';
 import letterKeysReducer from '../features/letterKeys/letterKeysSlice';
 import timeReducer from '../features/time/timeSlice';
+import highScoresReducer from '../features/highScores/highScoresSlice';
 
 export const store = configureStore({
     reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
         game: gameReducer,
         letterKeys: letterKeysReducer,
         time: timeReducer,
+        highScores: highScoresReducer,
     },
 });
 

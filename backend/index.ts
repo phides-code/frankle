@@ -3,6 +3,9 @@ import * as dotenv from 'dotenv';
 import getWord from './handlers/getWord';
 import getAllWords from './handlers/getAllWords';
 import checkValidity from './handlers/checkValidity';
+import getHighScores from './handlers/getHighScores';
+import addNewHighScore from './handlers/addNewHighScore';
+
 import path from 'path';
 
 dotenv.config();
@@ -17,6 +20,9 @@ app.use(express.static(path.resolve(__dirname, '../../frontend/build')));
 
 app.get('/api/getword', getWord);
 app.get('/api/getallwords', getAllWords);
+app.get('/api/gethighscores', getHighScores);
+// hide in .env:
+app.post('/api/addnewhighscore', addNewHighScore);
 app.post('/api/checkvalidity', checkValidity);
 
 app.get('*', (req: Request, res: Response) => {

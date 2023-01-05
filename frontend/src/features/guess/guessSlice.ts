@@ -36,10 +36,15 @@ const initialState: GuessState = {
 
 export const fetchValidity = createAsyncThunk(
     'guess/fetchValidity',
+
     async (guess: string) => {
+        const API_KEY = process.env.REACT_APP_HIGHSCORES_API_KEY as string;
         const rawFetchResponse = await fetch('/api/checkvalidity', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'X-API-Key': API_KEY,
+            },
             body: JSON.stringify({ guess }),
         });
 
