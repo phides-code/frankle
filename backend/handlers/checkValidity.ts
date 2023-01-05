@@ -19,6 +19,10 @@ const checkValidity = async (req: Request, res: Response) => {
     const dbName = 'frankle';
     const collectionName = 'wordlist';
 
+    const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    console.log('*** got IP: ');
+    console.log(ip); // ip address of the user
+
     try {
         await client.connect();
         const db = client.db(dbName);
