@@ -43,7 +43,7 @@ export const fetchValidity = createAsyncThunk(
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-API-Key': API_KEY,
+                Authorization: API_KEY,
             },
             body: JSON.stringify({ guess }),
         });
