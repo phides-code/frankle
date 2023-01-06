@@ -1,9 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
+import CryptoJS from 'crypto-js';
 
 interface FetchReponseType {
     httpStatus: number;
-    data: HighScore[] | null;
+    data: HighScore[];
 }
 
 interface HighScore {
@@ -20,29 +21,40 @@ interface HighScoresState {
 const initialState: HighScoresState = {
     highScores: {
         httpStatus: 200,
-        data: null,
+        data: [],
     },
     status: 'idle',
 };
-
-// set up 'addHighScore'
-// hide path in .env
-/*
-        example:
-
-        Populate .env as follows:
-
-        REACT_APP_AUTH0_DOMAIN=
-        REACT_APP_AUTH0_CLIENT_ID=
-
-        domain={process.env.REACT_APP_AUTH0_DOMAIN}
-        clientId={process.env.REACT_APP_AUTH0_CLIENTID}
-        */
 
 export const fetchHighScores = createAsyncThunk(
     'highScores/fetchHighScores',
     async () => {
         const rawFetchResponse = await fetch('/api/gethighscores');
+        const fetchResponse: FetchReponseType = await rawFetchResponse.json();
+
+        return fetchResponse;
+    }
+);
+
+export const addHighScore = createAsyncThunk(
+    'highScores/addHighScore',
+
+    async (highScore: HighScore) => {
+        const API_KEY = process.env.REACT_APP_HIGHSCORES_API_KEY as string;
+        const encryptedHighScore = CryptoJS.AES.encrypt(
+            JSON.stringify(highScore),
+            API_KEY
+        );
+        const encryptedHighScoreString = encryptedHighScore.toString();
+
+        const rawFetchResponse = await fetch('/api/addhighscore', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ encryptedHighScoreString }),
+        });
+
         const fetchResponse: FetchReponseType = await rawFetchResponse.json();
 
         return fetchResponse;
@@ -63,6 +75,15 @@ const highScoresSlice = createSlice({
                 state.highScores = action.payload;
             })
             .addCase(fetchHighScores.rejected, (state) => {
+                state.status = 'failed';
+            })
+            .addCase(addHighScore.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(addHighScore.fulfilled, (state, action) => {
+                state.status = 'idle';
+            })
+            .addCase(addHighScore.rejected, (state) => {
                 state.status = 'failed';
             });
     },

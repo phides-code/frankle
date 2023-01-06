@@ -29,7 +29,7 @@ const MainGrid = () => {
 
     useEffect(() => {
         if (wordFetchStatus === 'idle' && word.length === 0) {
-            console.log('running useEffect dispatch...');
+            console.log('fetching word');
             dispatch(fetchWord());
         }
     }, [wordFetchStatus, word, dispatch]);
@@ -37,51 +37,45 @@ const MainGrid = () => {
     console.log('*** got word: ');
     console.log(word);
 
+    if (errorState) {
+        return <>Something went wrong... please reload</>;
+    }
+
+    if (isLoading) {
+        return <>...</>;
+    }
+
     return (
         <>
             <Wrapper>
-                {errorState ? (
-                    <>Something went wrong... please reload</>
-                ) : isLoading ? (
-                    <>...</>
-                ) : (
-                    <>
-                        <GuessRows>
-                            {rows.map((_, row: number) => (
-                                <GuessRowWrapper
-                                    key={Math.floor(Math.random() * 99999999)}
-                                >
-                                    {letters.map(
-                                        (_, letterPosition: number) => {
-                                            const thisLetterBox =
-                                                board[row][letterPosition];
-                                            return (
-                                                <StyledLetterBox
-                                                    key={Math.floor(
-                                                        Math.random() * 99999999
-                                                    )}
-                                                    bgColor={
-                                                        thisLetterBox.bgColor
-                                                    }
-                                                    fgColor={
-                                                        thisLetterBox.fgColor
-                                                    }
-                                                    style={{
-                                                        transition:
-                                                            'background-color 1s, color 1s',
-                                                    }}
-                                                >
-                                                    {thisLetterBox.letter}
-                                                </StyledLetterBox>
-                                            );
-                                        }
-                                    )}
-                                </GuessRowWrapper>
-                            ))}
-                        </GuessRows>
-                        <Keyboard />
-                    </>
-                )}
+                <GuessRows>
+                    {rows.map((_, row: number) => (
+                        <GuessRowWrapper
+                            key={Math.floor(Math.random() * 99999999)}
+                        >
+                            {letters.map((_, letterPosition: number) => {
+                                const thisLetterBox =
+                                    board[row][letterPosition];
+                                return (
+                                    <StyledLetterBox
+                                        key={Math.floor(
+                                            Math.random() * 99999999
+                                        )}
+                                        bgColor={thisLetterBox.bgColor}
+                                        fgColor={thisLetterBox.fgColor}
+                                        style={{
+                                            transition:
+                                                'background-color 1s, color 1s',
+                                        }}
+                                    >
+                                        {thisLetterBox.letter}
+                                    </StyledLetterBox>
+                                );
+                            })}
+                        </GuessRowWrapper>
+                    ))}
+                </GuessRows>
+                <Keyboard />
             </Wrapper>
             <Message />
         </>

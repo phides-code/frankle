@@ -4,7 +4,7 @@ import getWord from './handlers/getWord';
 import getAllWords from './handlers/getAllWords';
 import checkValidity from './handlers/checkValidity';
 import getHighScores from './handlers/getHighScores';
-import addNewHighScore from './handlers/addNewHighScore';
+import addHighScore from './handlers/addHighScore';
 
 import path from 'path';
 
@@ -21,8 +21,7 @@ app.use(express.static(path.resolve(__dirname, '../../frontend/build')));
 app.get('/api/getword', getWord);
 app.get('/api/getallwords', getAllWords);
 app.get('/api/gethighscores', getHighScores);
-// hide in .env:
-app.post('/api/addnewhighscore', addNewHighScore);
+app.post('/api/addhighscore', addHighScore);
 app.post('/api/checkvalidity', checkValidity);
 
 app.get('*', (req: Request, res: Response) => {
