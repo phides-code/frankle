@@ -46,7 +46,7 @@ const GameOverDialog = () => {
     };
 
     return (
-        <div>
+        <Wrapper>
             {/* <GuessRowWrapper>
                 {wordArray.map((letter) => {
                     return (
@@ -61,19 +61,36 @@ const GameOverDialog = () => {
                     );
                 })}
             </GuessRowWrapper> */}
-            {gameWon ? <WinMessage /> : <LossMessage />}
-            <StyledResetDiv>
-                <button
+            {/* {gameWon ? <WinMessage /> : <LossMessage />} */}
+            <StyledPlayAgainDiv>
+                <PlayAgainButton
                     onClick={() => {
                         resetGame();
                     }}
                 >
                     Play Again
-                </button>
-            </StyledResetDiv>
-        </div>
+                </PlayAgainButton>
+            </StyledPlayAgainDiv>
+        </Wrapper>
     );
 };
+
+const StyledPlayAgainDiv = styled.div`
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    /* align-content: stretch; */
+    /* margin: auto 0; */
+`;
+
+const PlayAgainButton = styled.button``;
+
+const Wrapper = styled.div`
+    border: 2px solid orange;
+    height: 10.5rem;
+`;
 
 // const GuessRowWrapper = styled.div`
 //     display: flex;
@@ -96,7 +113,5 @@ const GameOverDialog = () => {
 //     align-content: stretch;
 //     font-size: xx-large;
 // `;
-
-const StyledResetDiv = styled.div``;
 
 export default GameOverDialog;
