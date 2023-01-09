@@ -6,6 +6,8 @@ import { fetchWord, selectWord } from '../features/word/wordSlice';
 import Keyboard from './Keyboard';
 import Message from './Message';
 import { selectGuessStatus } from '../features/guess/guessSlice';
+import { selectGameStatus } from '../features/game/gameSlice';
+import GameOverDialog from './GameOverDialog';
 
 interface StyledLetterBoxProps {
     bgColor: string;
@@ -16,7 +18,9 @@ const MainGrid = () => {
     const dispatch = useAppDispatch();
     const wordObject = useAppSelector(selectWord);
     const guessStatus = useAppSelector(selectGuessStatus);
+    const gameStatus = useAppSelector(selectGameStatus);
 
+    const gameOver = gameStatus.gameOver;
     const board = guessStatus.board;
     const wordFetchStatus = wordObject.status;
     const word = wordObject.wordObject.data;
@@ -75,7 +79,7 @@ const MainGrid = () => {
                         </GuessRowWrapper>
                     ))}
                 </GuessRows>
-                <Keyboard />
+                {gameOver ? <GameOverDialog /> : <Keyboard />}
             </Wrapper>
             <Message />
         </>

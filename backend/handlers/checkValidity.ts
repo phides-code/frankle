@@ -15,12 +15,6 @@ const checkValidity = async (req: Request, res: Response) => {
     console.log('Checking validity of guess: ');
     console.dir(req.body.guess);
 
-    // const apiKey = req.headers['x-api-key'];
-
-    // console.log('*** got apiKey: ' + apiKey);
-
-    console.log(req.headers);
-
     const client = new MongoClient(MONGO_URI, options);
     const dbName = 'frankle';
     const collectionName = 'wordlist';

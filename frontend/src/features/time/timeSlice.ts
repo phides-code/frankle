@@ -2,15 +2,15 @@ import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 
 interface TimeState {
-    bestTime: number | null;
-    startTime: number | null;
-    endTime: number | null;
+    bestTime: number;
+    startTime: number;
+    endTime: number;
 }
 
 const initialState: TimeState = {
-    bestTime: null,
-    startTime: null,
-    endTime: null,
+    bestTime: 0,
+    startTime: 0,
+    endTime: 0,
 };
 
 const timeSlice = createSlice({

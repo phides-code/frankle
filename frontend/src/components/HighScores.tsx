@@ -4,6 +4,8 @@ import {
     fetchHighScores,
     selectHighScores,
 } from '../features/highScores/highScoresSlice';
+import styled from 'styled-components';
+import formatTime from '../formatTime';
 
 const HighScores = () => {
     const dispatch = useAppDispatch();
@@ -37,15 +39,27 @@ const HighScores = () => {
     return (
         <div>
             {highScores?.map((highScore) => (
-                <div key={Math.floor(Math.random() * 99999999)}>
-                    <div>{highScore.name}</div>
-                    <div>{highScore.time}</div>
-                    <div>{highScore.word}</div>
-                    ***
-                </div>
+                <HighScoreWrapper key={Math.floor(Math.random() * 99999999)}>
+                    <Name>{highScore.name}</Name>
+                    <Time>{formatTime(highScore.time)}</Time>
+                    <Word>{highScore.word}</Word>
+                </HighScoreWrapper>
             ))}
         </div>
     );
 };
+
+const Name = styled.div``;
+const Time = styled.div``;
+const Word = styled.div``;
+
+const HighScoreWrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    align-items: stretch;
+    align-content: stretch;
+`;
 
 export default HighScores;

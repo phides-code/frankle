@@ -34,7 +34,6 @@ const addHighScore = async (req: Request, res: Response) => {
     );
     const newHighScore = JSON.parse(decryptedHighScoreString);
 
-    // Type assertion
     if (
         typeof newHighScore !== 'object' ||
         (newHighScore as HighScore).name === undefined ||

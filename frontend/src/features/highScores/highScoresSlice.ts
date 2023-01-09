@@ -72,7 +72,11 @@ const highScoresSlice = createSlice({
             })
             .addCase(fetchHighScores.fulfilled, (state, action) => {
                 state.status = 'idle';
-                state.highScores = action.payload;
+                state.highScores = {
+                    httpStatus: action.payload.httpStatus,
+                    data: action.payload.data.sort((a, b) => a.time - b.time),
+                    // truncate array to 10
+                };
             })
             .addCase(fetchHighScores.rejected, (state) => {
                 state.status = 'failed';
@@ -80,7 +84,7 @@ const highScoresSlice = createSlice({
             .addCase(addHighScore.pending, (state) => {
                 state.status = 'loading';
             })
-            .addCase(addHighScore.fulfilled, (state, action) => {
+            .addCase(addHighScore.fulfilled, (state) => {
                 state.status = 'idle';
             })
             .addCase(addHighScore.rejected, (state) => {

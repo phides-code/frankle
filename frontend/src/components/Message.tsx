@@ -5,34 +5,20 @@ import { WORD_LENGTH } from '../constants';
 import { selectWord } from '../features/word/wordSlice';
 import { selectGameStatus } from '../features/game/gameSlice';
 import { selectTimeStatus } from '../features/time/timeSlice';
-import moment from 'moment';
+import formatTime from '../formatTime';
+// import { selectHighScores } from '../features/highScores/highScoresSlice';
 
 const Message = () => {
     const guessStatus = useAppSelector(selectGuessStatus);
     const wordObject = useAppSelector(selectWord);
     const gameStatus = useAppSelector(selectGameStatus);
     const times = useAppSelector(selectTimeStatus);
+    // const highScoresObject = useAppSelector(selectHighScores);
+    // const highScores = highScoresObject.highScores.data;
+    // const timeToBeat = highScores.at(-1);
 
     const word = wordObject.wordObject.data;
     const validGuess = guessStatus.guessValidityObject.data;
-
-    const formatTime = (timeInMs: number) => {
-        const duration = moment.duration(timeInMs);
-        let timeString: string = '';
-
-        if (timeInMs > 3600000) {
-            timeString += duration.hours().toString().padStart(2, '0') + ':';
-        }
-
-        timeString +=
-            duration.minutes().toString().padStart(2, '0') +
-            ':' +
-            duration.seconds().toString().padStart(2, '0') +
-            ':' +
-            duration.milliseconds().toString().padStart(3, '0');
-
-        return timeString;
-    };
 
     const noMessage = useMemo(() => ({ text: '', color: '' }), []);
 
@@ -48,14 +34,10 @@ const Message = () => {
 
     const winMessage = useMemo(() => {
         const { startTime, endTime } = times;
+        const timeInMs = endTime - startTime;
 
-        let thisGameTime: string = '';
-
-        if (!!startTime && !!endTime) {
-            thisGameTime = formatTime(endTime - startTime);
-        }
         return {
-            text: 'Well done! Your time was ' + thisGameTime,
+            text: 'Well done! Your time was ' + formatTime(timeInMs),
             color: 'green',
         };
     }, [times]);
