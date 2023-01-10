@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { resetGameState, selectGameStatus } from '../features/game/gameSlice';
-import { fetchWord, selectWord } from '../features/word/wordSlice';
+import { fetchWord, selectDecryptedWord } from '../features/word/wordSlice';
 import { resetGuessState } from '../features/guess/guessSlice';
 import { resetLetterKeysState } from '../features/letterKeys/letterKeysSlice';
 import {
@@ -37,12 +37,10 @@ const GameOverDialog = () => {
     };
 
     const NewHighScoreDialog = () => {
+        const navigate = useNavigate();
         const [name, setName] = useState('');
         const [isSubmitting, setIsSubmitting] = useState(false);
-        const wordObject = useAppSelector(selectWord);
-        const navigate = useNavigate();
-
-        const word = wordObject.wordObject.data;
+        const word = useAppSelector(selectDecryptedWord);
 
         const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
             const inputName = event.currentTarget.value;

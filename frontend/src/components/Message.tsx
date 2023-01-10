@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useAppSelector } from '../app/hooks';
 import { selectGuessStatus } from '../features/guess/guessSlice';
 import { WORD_LENGTH } from '../constants';
-import { selectWord } from '../features/word/wordSlice';
+import { selectDecryptedWord } from '../features/word/wordSlice';
 import { selectGameStatus } from '../features/game/gameSlice';
 import { selectTimeStatus } from '../features/time/timeSlice';
 import formatTime from '../formatTime';
@@ -14,11 +14,10 @@ interface WrapperProps {
 
 const Message = () => {
     const guessStatus = useAppSelector(selectGuessStatus);
-    const wordObject = useAppSelector(selectWord);
     const gameStatus = useAppSelector(selectGameStatus);
     const times = useAppSelector(selectTimeStatus);
+    const word = useAppSelector(selectDecryptedWord);
 
-    const word = wordObject.wordObject.data;
     const validGuess = guessStatus.guessValidityObject.data;
 
     const noMessage = useMemo(() => ({ text: '', color: '' }), []);

@@ -2,7 +2,11 @@ import { useEffect } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { NUM_OF_GUESSES, WORD_LENGTH } from '../constants';
-import { fetchWord, selectWord } from '../features/word/wordSlice';
+import {
+    fetchWord,
+    selectDecryptedWord,
+    selectWord,
+} from '../features/word/wordSlice';
 import Keyboard from './Keyboard';
 import Message from './Message';
 import { selectGuessStatus } from '../features/guess/guessSlice';
@@ -20,11 +24,11 @@ const MainGrid = () => {
     const wordObject = useAppSelector(selectWord);
     const guessStatus = useAppSelector(selectGuessStatus);
     const gameStatus = useAppSelector(selectGameStatus);
+    const word = useAppSelector(selectDecryptedWord);
 
     const gameOver = gameStatus.gameOver;
     const board = guessStatus.board;
     const wordFetchStatus = wordObject.status;
-    const word = wordObject.wordObject.data;
     const httpStatus = wordObject.wordObject.httpStatus;
     const errorState = httpStatus !== 200 || wordFetchStatus === 'failed';
     const isLoading = wordFetchStatus === 'loading';

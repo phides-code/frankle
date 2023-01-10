@@ -1,10 +1,12 @@
 import { Request, Response } from 'express';
 import { MongoClient, MongoClientOptions } from 'mongodb';
 import * as dotenv from 'dotenv';
+import CryptoJS from 'crypto-js';
 
 dotenv.config();
 
 const MONGO_URI = process.env.MONGO_URI as string;
+const WORD_SECRET_KEY = process.env.WORD_SECRET_KEY as string;
 
 const options = {
     useNewUrlParser: true,
@@ -29,9 +31,14 @@ const getWord = async (req: Request, res: Response) => {
         console.log('returning random word: ');
         console.log(randomWord);
 
+        const encryptedWord = CryptoJS.AES.encrypt(
+            randomWord,
+            WORD_SECRET_KEY
+        ).toString();
+
         return res.status(200).json({
             httpStatus: 200,
-            data: randomWord,
+            data: encryptedWord,
         });
     } catch (error: any) {
         console.log('getWord caught error: ');
