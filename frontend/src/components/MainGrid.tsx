@@ -8,6 +8,7 @@ import Message from './Message';
 import { selectGuessStatus } from '../features/guess/guessSlice';
 import { selectGameStatus } from '../features/game/gameSlice';
 import GameOverDialog from './GameOverDialog';
+import { fetchHighScores } from '../features/highScores/highScoresSlice';
 
 interface StyledLetterBoxProps {
     bgColor: string;
@@ -30,6 +31,11 @@ const MainGrid = () => {
 
     const rows: number[] = Array(NUM_OF_GUESSES).fill(0);
     const letters: number[] = Array(WORD_LENGTH).fill(0);
+
+    useEffect(() => {
+        console.log('fetching high scores');
+        dispatch(fetchHighScores());
+    }, [dispatch]);
 
     useEffect(() => {
         if (wordFetchStatus === 'idle' && word.length === 0) {
@@ -67,10 +73,6 @@ const MainGrid = () => {
                                         )}
                                         bgColor={thisLetterBox.bgColor}
                                         fgColor={thisLetterBox.fgColor}
-                                        style={{
-                                            transition:
-                                                'background-color 1s, color 1s',
-                                        }}
                                     >
                                         {thisLetterBox.letter}
                                     </StyledLetterBox>
@@ -79,9 +81,9 @@ const MainGrid = () => {
                         </GuessRowWrapper>
                     ))}
                 </GuessRows>
+                <Message />
                 {gameOver ? <GameOverDialog /> : <Keyboard />}
             </Wrapper>
-            <Message />
         </>
     );
 };
@@ -90,6 +92,7 @@ const Wrapper = styled.div`
     border: 2px solid darkgray;
     display: flex;
     flex-direction: column;
+    border-radius: 5px;
 `;
 
 const GuessRows = styled.div``;
@@ -104,7 +107,8 @@ const StyledLetterBox = styled.div<StyledLetterBoxProps>`
     background-color: ${(props) => props.bgColor};
     color: ${(props) => props.fgColor};
     border: 2px solid darkgray;
-    margin: 0.4rem;
+    border-radius: 5px;
+    margin: 0.2rem;
     min-height: 4rem;
     width: 100%;
     display: flex;
@@ -114,6 +118,8 @@ const StyledLetterBox = styled.div<StyledLetterBoxProps>`
     align-items: center;
     align-content: stretch;
     font-size: xx-large;
+
+    transition: 'background-color 1s, color 1s';
 `;
 
 export default MainGrid;

@@ -224,6 +224,7 @@ const Keyboard = () => {
                                     key={keyboardKey}
                                     onClick={handleKeyPress}
                                     value='reset'
+                                    title='Reset game'
                                 >
                                     <img
                                         src={
@@ -286,6 +287,7 @@ const Row = styled.div`
 `;
 
 const Key = styled.button`
+    border-radius: 5px;
     padding: 0;
     flex: 1;
     margin-right: 0.1rem;

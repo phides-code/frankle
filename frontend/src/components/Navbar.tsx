@@ -1,36 +1,12 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-// import { useAppDispatch, useAppSelector } from '../app/hooks';
-// import { selectWord } from '../features/word/wordSlice';
-// import {
-//     addHighScore,
-//     fetchHighScores,
-// } from '../features/highScores/highScoresSlice';
 
 const Navbar = () => {
-    // const dispatch = useAppDispatch();
-    // const wordObject = useAppSelector(selectWord);
-    // const word = wordObject.wordObject.data;
-
     return (
         <Wrapper>
             <StyledLink to='/'>Frankle</StyledLink>
-            <StyledLink to='/highscores'>High Scores</StyledLink>
+            <StyledLink to='/besttimes'>Best Times</StyledLink>
             <StyledLink to='/rules'>Rules</StyledLink>
-            {/* <button
-                onClick={async () => {
-                    await dispatch(
-                        addHighScore({
-                            name: 'Don',
-                            time: 12345,
-                            word: word,
-                        })
-                    );
-                    dispatch(fetchHighScores());
-                }}
-            >
-                post high score
-            </button> */}
         </Wrapper>
     );
 };

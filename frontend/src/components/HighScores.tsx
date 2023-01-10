@@ -29,17 +29,25 @@ const HighScores = () => {
     }
 
     if (errorState) {
-        return <div>Failed to load high scores</div>;
+        return <div>Failed to load best times</div>;
     }
 
     if (highScores.length === 0) {
-        return <div>No high scores</div>;
+        return <div>No best times</div>;
     }
 
     return (
         <div>
-            {highScores?.map((highScore) => (
+            <HighScoreHeader>
+                <Rank></Rank>
+                <Name>Name</Name>
+                <Time>Time</Time>
+                <Word>Word</Word>
+            </HighScoreHeader>
+
+            {highScores?.map((highScore, i) => (
                 <HighScoreWrapper key={Math.floor(Math.random() * 99999999)}>
+                    <Rank>{i + 1}</Rank>
                     <Name>{highScore.name}</Name>
                     <Time>{formatTime(highScore.time)}</Time>
                     <Word>{highScore.word}</Word>
@@ -49,17 +57,28 @@ const HighScores = () => {
     );
 };
 
-const Name = styled.div``;
-const Time = styled.div``;
-const Word = styled.div``;
+const HighScoreText = styled.div`
+    flex: 1;
+    text-align: left;
+`;
+
+const Rank = styled(HighScoreText)`
+    max-width: 2rem;
+`;
+const Name = styled(HighScoreText)``;
+const Time = styled(HighScoreText)``;
+const Word = styled(HighScoreText)``;
 
 const HighScoreWrapper = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: space-evenly;
-    align-items: stretch;
-    align-content: stretch;
+    justify-content: space-around;
+`;
+
+const HighScoreHeader = styled(HighScoreWrapper)`
+    border-bottom: 1px solid darkgrey;
+    font-weight: bold;
 `;
 
 export default HighScores;

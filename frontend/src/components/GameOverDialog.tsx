@@ -4,14 +4,29 @@ import { resetGameState, selectGameStatus } from '../features/game/gameSlice';
 import { fetchWord, selectWord } from '../features/word/wordSlice';
 import { resetGuessState } from '../features/guess/guessSlice';
 import { resetLetterKeysState } from '../features/letterKeys/letterKeysSlice';
+import {
+    addHighScore,
+    fetchHighScores,
+    selectHighScores,
+} from '../features/highScores/highScoresSlice';
+import { selectTimeStatus } from '../features/time/timeSlice';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { MAX_HIGHSCORES } from '../constants';
 
 const GameOverDialog = () => {
     const dispatch = useAppDispatch();
     const gameStatus = useAppSelector(selectGameStatus);
-    const wordObject = useAppSelector(selectWord);
+    const highScoresObject = useAppSelector(selectHighScores);
+    const timeStatus = useAppSelector(selectTimeStatus);
 
-    const wordArray = wordObject.wordObject.data.split('');
     const gameWon: boolean = gameStatus.gameResult === 'win';
+    const thisTime = timeStatus.endTime - timeStatus.startTime;
+    const highScores = highScoresObject.highScores.data;
+    const timeToBeat = highScores.at(-1)?.time as number;
+    const newHighScore: boolean =
+        (thisTime < timeToBeat || highScores.length < MAX_HIGHSCORES) &&
+        gameWon;
 
     const resetGame = () => {
         console.log('resetting game');
@@ -21,97 +36,127 @@ const GameOverDialog = () => {
         dispatch(resetLetterKeysState());
     };
 
-    const WinMessage = () => {
-        return (
-            <div
-                style={{
-                    color: 'green',
-                }}
-            >
-                Well done!
-            </div>
-        );
-    };
+    const NewHighScoreDialog = () => {
+        const [name, setName] = useState('');
+        const [isSubmitting, setIsSubmitting] = useState(false);
+        const wordObject = useAppSelector(selectWord);
+        const navigate = useNavigate();
 
-    const LossMessage = () => {
+        const word = wordObject.wordObject.data;
+
+        const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
+            const inputName = event.currentTarget.value;
+
+            if (inputName.length <= 10) {
+                setName(inputName);
+            }
+        };
+
+        const handleSubmit = async () => {
+            setIsSubmitting(true);
+
+            await dispatch(
+                addHighScore({
+                    name: name,
+                    time: thisTime,
+                    word: word,
+                })
+            );
+            await dispatch(fetchHighScores());
+
+            resetGame();
+            navigate('/besttimes');
+        };
+
         return (
-            <div
-                style={{
-                    color: 'red',
-                }}
-            >
-                ... Better luck next time.
-            </div>
+            <HighScoreWrapper>
+                <NewHighScoreMessage>
+                    A new high score! Enter your name, initials, or handle:
+                </NewHighScoreMessage>
+
+                <StyledInput
+                    type='text'
+                    disabled={isSubmitting}
+                    onChange={(event) => {
+                        handleChange(event);
+                    }}
+                />
+                <ButtonWrapper>
+                    <ContinueButton
+                        disabled={isSubmitting || name.length === 0}
+                        onClick={() => handleSubmit()}
+                    >
+                        Continue
+                    </ContinueButton>
+                </ButtonWrapper>
+            </HighScoreWrapper>
         );
     };
 
     return (
         <Wrapper>
-            {/* <GuessRowWrapper>
-                {wordArray.map((letter) => {
-                    return (
-                        <StyledLetterBox
-                            key={Math.floor(Math.random() * 99999999)}
-                            style={{
-                                transition: 'background-color 1s, color 1s',
-                            }}
-                        >
-                            {letter}
-                        </StyledLetterBox>
-                    );
-                })}
-            </GuessRowWrapper> */}
-            {/* {gameWon ? <WinMessage /> : <LossMessage />} */}
-            <StyledPlayAgainDiv>
-                <PlayAgainButton
-                    onClick={() => {
-                        resetGame();
-                    }}
-                >
-                    Play Again
-                </PlayAgainButton>
-            </StyledPlayAgainDiv>
+            {newHighScore ? (
+                <NewHighScoreDialog />
+            ) : (
+                <ButtonWrapper>
+                    <PlayAgainButton
+                        onClick={() => {
+                            resetGame();
+                        }}
+                    >
+                        Play again
+                    </PlayAgainButton>
+                </ButtonWrapper>
+            )}
         </Wrapper>
     );
 };
 
-const StyledPlayAgainDiv = styled.div`
+const Wrapper = styled.div``;
+const HighScoreWrapper = styled.div`
     display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    /* align-content: stretch; */
-    /* margin: auto 0; */
 `;
 
-const PlayAgainButton = styled.button``;
+const StyledInput = styled.input`
+    display: flex;
+    border: 2px solid darkgrey;
+    margin-top: 0.4rem;
+    min-height: 1.5rem;
+    max-width: 6rem;
+    background-color: black;
+    color: darkgrey;
+    border-radius: 5px;
+`;
 
-const Wrapper = styled.div`
-    border: 2px solid orange;
+const ButtonWrapper = styled.div`
     height: 10.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 `;
 
-// const GuessRowWrapper = styled.div`
-//     display: flex;
-//     flex-direction: row;
-//     height: 100%;
-// `;
+const NewHighScoreMessage = styled.div`
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-top: 0.3rem;
+    color: green;
+`;
 
-// const StyledLetterBox = styled.div`
-//     background: green;
-//     color: white;
-//     border: 2px solid darkgray;
-//     margin: 0.4rem;
-//     min-height: 4rem;
-//     width: 100%;
-//     display: flex;
-//     flex-direction: row;
-//     flex-wrap: nowrap;
-//     justify-content: center;
-//     align-items: center;
-//     align-content: stretch;
-//     font-size: xx-large;
-// `;
+const BigButton = styled.button`
+    padding: 1rem 2rem;
+    border: 1px solid darkgrey;
+    background: none;
+    color: darkgrey;
+    border-radius: 5px;
+    font-size: larger;
+`;
+
+const PlayAgainButton = styled(BigButton)``;
+const ContinueButton = styled(BigButton)``;
 
 export default GameOverDialog;

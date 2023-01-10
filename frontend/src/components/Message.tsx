@@ -6,16 +6,13 @@ import { selectWord } from '../features/word/wordSlice';
 import { selectGameStatus } from '../features/game/gameSlice';
 import { selectTimeStatus } from '../features/time/timeSlice';
 import formatTime from '../formatTime';
-// import { selectHighScores } from '../features/highScores/highScoresSlice';
+import styled from 'styled-components';
 
 const Message = () => {
     const guessStatus = useAppSelector(selectGuessStatus);
     const wordObject = useAppSelector(selectWord);
     const gameStatus = useAppSelector(selectGameStatus);
     const times = useAppSelector(selectTimeStatus);
-    // const highScoresObject = useAppSelector(selectHighScores);
-    // const highScores = highScoresObject.highScores.data;
-    // const timeToBeat = highScores.at(-1);
 
     const word = wordObject.wordObject.data;
     const validGuess = guessStatus.guessValidityObject.data;
@@ -74,15 +71,20 @@ const Message = () => {
     }, [gameStatus.gameResult, word, lossMessage, noMessage, winMessage]);
 
     return (
-        <div
+        <Wrapper
             style={{
                 marginTop: '0.5rem',
                 color: message.color,
+                minHeight: '1.2rem',
             }}
         >
             {message.text}
-        </div>
+        </Wrapper>
     );
 };
+
+const Wrapper = styled.div`
+    margin-left: 0.3rem;
+`;
 
 export default Message;

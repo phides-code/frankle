@@ -7,6 +7,7 @@ dotenv.config();
 
 const MONGO_URI = process.env.MONGO_URI as string;
 const HIGHSCORES_API_KEY = process.env.HIGHSCORES_API_KEY as string;
+const MAX_HIGHSCORES = 20;
 
 const options = {
     useNewUrlParser: true,
@@ -62,6 +63,28 @@ const addHighScore = async (req: Request, res: Response) => {
         console.log('got resultOfInsert: ');
         console.log(resultOfInsert);
         console.log('Added to high scores list');
+
+        // truncate high scores to MAX_HIGHSCORES
+        const allHighScores = await db
+            .collection(collectionName)
+            .find()
+            .toArray();
+
+        if (allHighScores.length > MAX_HIGHSCORES) {
+            const elementToDelete = allHighScores.sort(
+                (a, b) => b.time - a.time
+            )[0];
+            console.log('deleting: ');
+            console.log(elementToDelete);
+
+            const resultOfDelete = await db
+                .collection(collectionName)
+                .deleteOne({
+                    _id: elementToDelete._id,
+                });
+
+            console.log(resultOfDelete);
+        }
 
         return res.status(200).json({
             httpStatus: 201,
