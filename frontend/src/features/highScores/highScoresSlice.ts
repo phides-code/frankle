@@ -75,7 +75,6 @@ const highScoresSlice = createSlice({
                 state.highScores = {
                     httpStatus: action.payload.httpStatus,
                     data: action.payload.data.sort((a, b) => a.time - b.time),
-                    // truncate array to 10
                 };
             })
             .addCase(fetchHighScores.rejected, (state) => {
