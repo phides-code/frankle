@@ -84,7 +84,6 @@ const Keyboard = () => {
         }
 
         const guess = assembleGuess();
-        console.log('checking guess: ' + guess);
 
         for (let i = 0; i < WORD_LENGTH; i++) {
             const thisLetter = guess[i];

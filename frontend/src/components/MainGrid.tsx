@@ -44,9 +44,6 @@ const MainGrid = () => {
         }
     }, [wordFetchStatus, word, dispatch]);
 
-    console.log('*** got word: ');
-    console.log(word);
-
     if (errorState) {
         return <>Something went wrong... please reload</>;
     }

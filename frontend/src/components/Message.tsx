@@ -8,6 +8,10 @@ import { selectTimeStatus } from '../features/time/timeSlice';
 import formatTime from '../formatTime';
 import styled from 'styled-components';
 
+interface WrapperProps {
+    messageColor: string;
+}
+
 const Message = () => {
     const guessStatus = useAppSelector(selectGuessStatus);
     const wordObject = useAppSelector(selectWord);
@@ -70,21 +74,14 @@ const Message = () => {
         }
     }, [gameStatus.gameResult, word, lossMessage, noMessage, winMessage]);
 
-    return (
-        <Wrapper
-            style={{
-                marginTop: '0.5rem',
-                color: message.color,
-                minHeight: '1.2rem',
-            }}
-        >
-            {message.text}
-        </Wrapper>
-    );
+    return <Wrapper messageColor={message.color}>{message.text}</Wrapper>;
 };
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<WrapperProps>`
     margin-left: 0.3rem;
+    margin-top: 0.5rem;
+    min-height: 1.2rem;
+    color: ${(props) => props.messageColor};
 `;
 
 export default Message;
