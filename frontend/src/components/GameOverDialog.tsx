@@ -130,7 +130,7 @@ const StyledInput = styled.input`
 `;
 
 const ButtonWrapper = styled.div`
-    height: 10.5rem;
+    height: 7.4rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
