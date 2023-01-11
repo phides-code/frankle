@@ -19,6 +19,7 @@ const GameOverDialog = () => {
     const gameStatus = useAppSelector(selectGameStatus);
     const highScoresObject = useAppSelector(selectHighScores);
     const timeStatus = useAppSelector(selectTimeStatus);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const gameWon: boolean = gameStatus.gameResult === 'win';
     const thisTime = timeStatus.endTime - timeStatus.startTime;
@@ -39,7 +40,6 @@ const GameOverDialog = () => {
     const NewHighScoreDialog = () => {
         const navigate = useNavigate();
         const [name, setName] = useState('');
-        const [isSubmitting, setIsSubmitting] = useState(false);
         const word = useAppSelector(selectDecryptedWord);
 
         const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
@@ -82,9 +82,11 @@ const GameOverDialog = () => {
                 <ButtonWrapper>
                     <ContinueButton
                         disabled={isSubmitting || name.length === 0}
-                        onClick={() => handleSubmit()}
+                        onClick={() => {
+                            handleSubmit();
+                        }}
                     >
-                        Continue
+                        {isSubmitting ? '...' : 'Continue'}
                     </ContinueButton>
                 </ButtonWrapper>
             </HighScoreWrapper>
@@ -155,6 +157,8 @@ const BigButton = styled.button`
 `;
 
 const PlayAgainButton = styled(BigButton)``;
-const ContinueButton = styled(BigButton)``;
+const ContinueButton = styled(BigButton)`
+    min-width: 8.4rem;
+`;
 
 export default GameOverDialog;
