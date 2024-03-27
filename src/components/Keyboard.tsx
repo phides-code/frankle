@@ -14,7 +14,7 @@ import {
     updateLetterBoxLetter,
 } from '../features/guess/guessSlice';
 import { WORD_LENGTH, NUM_OF_GUESSES } from '../constants';
-import { fetchWord, selectDecryptedWord } from '../features/word/wordSlice';
+import { fetchWord, selectWord } from '../features/word/wordSlice';
 import {
     endGame,
     resetGameState,
@@ -41,7 +41,8 @@ const Keyboard = () => {
     const guessStatus = useAppSelector(selectGuessStatus);
     const gameStatus = useAppSelector(selectGameStatus);
     const letterKeyStatus = useAppSelector(selectLetterKeyStatus);
-    const word = useAppSelector(selectDecryptedWord);
+    const wordState = useAppSelector(selectWord);
+    const word = wordState.wordObject.data as string;
 
     const { currentRow, currentLetterPosition } = guessStatus;
     const validGuess = guessStatus.guessValidityObject.data;

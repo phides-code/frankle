@@ -1,15 +1,14 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
-import CryptoJS from 'crypto-js';
 
 interface FetchReponseType {
-    httpStatus: number;
-    data: HighScore[];
+    error?: string;
+    data?: HighScore[];
 }
 
-interface HighScore {
-    name: string;
-    time: number;
+export interface HighScore {
+    playername: string;
+    wintime: number;
     word: string;
 }
 
@@ -20,16 +19,18 @@ interface HighScoresState {
 
 const initialState: HighScoresState = {
     highScores: {
-        httpStatus: 200,
         data: [],
     },
     status: 'idle',
 };
 
+const HIGHSCORES_SERVICE_URL = process.env
+    .REACT_APP_HIGHSCORES_SERVICE_URL as string;
+
 export const fetchHighScores = createAsyncThunk(
     'highScores/fetchHighScores',
     async () => {
-        const rawFetchResponse = await fetch('/api/gethighscores');
+        const rawFetchResponse = await fetch(HIGHSCORES_SERVICE_URL);
         const fetchResponse: FetchReponseType = await rawFetchResponse.json();
 
         return fetchResponse;
@@ -40,19 +41,12 @@ export const addHighScore = createAsyncThunk(
     'highScores/addHighScore',
 
     async (highScore: HighScore) => {
-        const API_KEY = process.env.REACT_APP_HIGHSCORES_API_KEY as string;
-        const encryptedHighScore = CryptoJS.AES.encrypt(
-            JSON.stringify(highScore),
-            API_KEY
-        );
-        const encryptedHighScoreString = encryptedHighScore.toString();
-
-        const rawFetchResponse = await fetch('/api/addhighscore', {
+        const rawFetchResponse = await fetch(HIGHSCORES_SERVICE_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ encryptedHighScoreString }),
+            body: JSON.stringify(highScore),
         });
 
         const fetchResponse: FetchReponseType = await rawFetchResponse.json();
@@ -73,8 +67,9 @@ const highScoresSlice = createSlice({
             .addCase(fetchHighScores.fulfilled, (state, action) => {
                 state.status = 'idle';
                 state.highScores = {
-                    httpStatus: action.payload.httpStatus,
-                    data: action.payload.data.sort((a, b) => a.time - b.time),
+                    data: action.payload.data?.sort(
+                        (a, b) => a.wintime - b.wintime
+                    ),
                 };
             })
             .addCase(fetchHighScores.rejected, (state) => {

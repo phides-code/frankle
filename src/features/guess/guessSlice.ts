@@ -38,13 +38,11 @@ export const fetchValidity = createAsyncThunk(
     'guess/fetchValidity',
 
     async (guess: string) => {
-        const rawFetchResponse = await fetch('/api/checkvalidity', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ guess }),
-        });
+        const WORDS_SERVICE_URL = process.env
+            .REACT_APP_WORDS_SERVICE_URL as string;
+        const rawFetchResponse = await fetch(
+            `${WORDS_SERVICE_URL}/check/${guess}`
+        );
 
         const fetchResponse: FetchReponseType = await rawFetchResponse.json();
 

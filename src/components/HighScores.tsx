@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import {
     fetchHighScores,
+    HighScore,
     selectHighScores,
 } from '../features/highScores/highScoresSlice';
 import styled from 'styled-components';
@@ -9,14 +10,11 @@ import formatTime from '../formatTime';
 
 const HighScores = () => {
     const dispatch = useAppDispatch();
-    const highScoresObject = useAppSelector(selectHighScores);
+    const highScoresState = useAppSelector(selectHighScores);
 
-    const highScoresFetchStatus = highScoresObject.status;
-    const highScores = highScoresObject.highScores.data;
-    const httpStatus = highScoresObject.highScores.httpStatus;
-    const errorState =
-        (httpStatus !== 200 && httpStatus !== 201) ||
-        highScoresFetchStatus === 'failed';
+    const highScoresFetchStatus = highScoresState.status;
+    const highScores = highScoresState.highScores.data as HighScore[];
+    const errorState = highScoresFetchStatus === 'failed';
     const isLoading = highScoresFetchStatus === 'loading';
 
     useEffect(() => {
@@ -48,8 +46,8 @@ const HighScores = () => {
             {highScores?.map((highScore, i) => (
                 <HighScoreWrapper key={Math.floor(Math.random() * 99999999)}>
                     <Rank>{i + 1}</Rank>
-                    <Name>{highScore.name}</Name>
-                    <Time>{formatTime(highScore.time)}</Time>
+                    <Name>{highScore.playername}</Name>
+                    <Time>{formatTime(highScore.wintime)}</Time>
                     <Word>{highScore.word}</Word>
                 </HighScoreWrapper>
             ))}

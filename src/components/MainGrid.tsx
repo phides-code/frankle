@@ -2,11 +2,7 @@ import { useEffect } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { NUM_OF_GUESSES, WORD_LENGTH } from '../constants';
-import {
-    fetchWord,
-    selectDecryptedWord,
-    selectWord,
-} from '../features/word/wordSlice';
+import { fetchWord, selectWord } from '../features/word/wordSlice';
 import Keyboard from './Keyboard';
 import Message from './Message';
 import { selectGuessStatus } from '../features/guess/guessSlice';
@@ -21,16 +17,15 @@ interface StyledLetterBoxProps {
 
 const MainGrid = () => {
     const dispatch = useAppDispatch();
-    const wordObject = useAppSelector(selectWord);
+    const wordState = useAppSelector(selectWord);
     const guessStatus = useAppSelector(selectGuessStatus);
     const gameStatus = useAppSelector(selectGameStatus);
-    const word = useAppSelector(selectDecryptedWord);
+    const word = wordState.wordObject?.data as string;
 
     const gameOver = gameStatus.gameOver;
     const board = guessStatus.board;
-    const wordFetchStatus = wordObject.status;
-    const httpStatus = wordObject.wordObject.httpStatus;
-    const errorState = httpStatus !== 200 || wordFetchStatus === 'failed';
+    const wordFetchStatus = wordState.status;
+    const errorState = wordFetchStatus === 'failed';
     const isLoading = wordFetchStatus === 'loading';
 
     const rows: number[] = Array(NUM_OF_GUESSES).fill(0);
@@ -42,7 +37,8 @@ const MainGrid = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        if (wordFetchStatus === 'idle' && word.length === 0) {
+        // if (wordFetchStatus === 'idle' && word.length === 0) {
+        if (wordFetchStatus === 'idle' && !word) {
             console.log('fetching word');
             dispatch(fetchWord());
         }

@@ -1,10 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
-import CryptoJS from 'crypto-js';
 
 interface FetchReponseType {
-    httpStatus: number;
-    data: string;
+    data?: string;
+    error?: string;
 }
 interface WordState {
     wordObject: FetchReponseType;
@@ -12,15 +11,14 @@ interface WordState {
 }
 
 const initialState: WordState = {
-    wordObject: {
-        httpStatus: 200,
-        data: '',
-    },
+    wordObject: {},
     status: 'idle',
 };
 
 export const fetchWord = createAsyncThunk('word/fetchWord', async () => {
-    const rawFetchResponse = await fetch('/api/getword');
+    const WORDS_SERVICE_URL = process.env.REACT_APP_WORDS_SERVICE_URL as string;
+
+    const rawFetchResponse = await fetch(`${WORDS_SERVICE_URL}/random`);
     const fetchResponse: FetchReponseType = await rawFetchResponse.json();
 
     return fetchResponse;
@@ -37,24 +35,15 @@ const wordSlice = createSlice({
             })
             .addCase(fetchWord.fulfilled, (state, action) => {
                 state.status = 'idle';
-                state.wordObject = action.payload;
+                state.wordObject = action.payload as FetchReponseType;
             })
-            .addCase(fetchWord.rejected, (state) => {
+            .addCase(fetchWord.rejected, (state, action) => {
                 state.status = 'failed';
+                state.wordObject = action.payload as FetchReponseType;
             });
     },
 });
 
 export const selectWord = (state: RootState) => state.word;
-
-export const selectDecryptedWord = (state: RootState) => {
-    const WORD_SECRET_KEY = process.env.REACT_APP_WORD_SECRET_KEY as string;
-    const decryptedWord = CryptoJS.AES.decrypt(
-        state.word.wordObject.data,
-        WORD_SECRET_KEY
-    );
-
-    return decryptedWord.toString(CryptoJS.enc.Utf8);
-};
 
 export default wordSlice.reducer;

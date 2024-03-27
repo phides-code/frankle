@@ -1,12 +1,13 @@
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { resetGameState, selectGameStatus } from '../features/game/gameSlice';
-import { fetchWord, selectDecryptedWord } from '../features/word/wordSlice';
+import { fetchWord, selectWord } from '../features/word/wordSlice';
 import { resetGuessState } from '../features/guess/guessSlice';
 import { resetLetterKeysState } from '../features/letterKeys/letterKeysSlice';
 import {
     addHighScore,
     fetchHighScores,
+    HighScore,
     selectHighScores,
 } from '../features/highScores/highScoresSlice';
 import { selectTimeStatus } from '../features/time/timeSlice';
@@ -17,14 +18,14 @@ import { MAX_HIGHSCORES } from '../constants';
 const GameOverDialog = () => {
     const dispatch = useAppDispatch();
     const gameStatus = useAppSelector(selectGameStatus);
-    const highScoresObject = useAppSelector(selectHighScores);
+    const highScoresState = useAppSelector(selectHighScores);
     const timeStatus = useAppSelector(selectTimeStatus);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const gameWon: boolean = gameStatus.gameResult === 'win';
     const thisTime = timeStatus.endTime - timeStatus.startTime;
-    const highScores = highScoresObject.highScores.data;
-    const timeToBeat = highScores.at(-1)?.time as number;
+    const highScores = highScoresState.highScores.data as HighScore[];
+    const timeToBeat = highScores.at(-1)?.wintime as number;
     const newHighScore: boolean =
         (thisTime < timeToBeat || highScores.length < MAX_HIGHSCORES) &&
         gameWon;
@@ -40,7 +41,8 @@ const GameOverDialog = () => {
     const NewHighScoreDialog = () => {
         const navigate = useNavigate();
         const [name, setName] = useState('');
-        const word = useAppSelector(selectDecryptedWord);
+        const wordState = useAppSelector(selectWord);
+        const word = wordState.wordObject.data as string;
 
         const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
             const inputName = event.currentTarget.value;
@@ -55,8 +57,8 @@ const GameOverDialog = () => {
 
             await dispatch(
                 addHighScore({
-                    name: name,
-                    time: thisTime,
+                    playername: name,
+                    wintime: thisTime,
                     word: word,
                 })
             );

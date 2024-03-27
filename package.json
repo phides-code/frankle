@@ -1,21 +1,51 @@
 {
-    "name": "frankle",
-    "version": "1.1.0",
-    "description": "A word guessing game.",
-    "main": "index.js",
+    "name": "frontend",
+    "version": "0.1.0",
+    "private": true,
+    "dependencies": {
+        "@reduxjs/toolkit": "^1.9.1",
+        "@testing-library/jest-dom": "^5.16.5",
+        "@testing-library/react": "^13.4.0",
+        "@testing-library/user-event": "^14.4.3",
+        "@types/jest": "^27.5.2",
+        "@types/node": "^17.0.45",
+        "@types/react": "^18.0.26",
+        "@types/react-dom": "^18.0.9",
+        "moment": "^2.29.4",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-redux": "^8.0.5",
+        "react-router-dom": "^6.4.5",
+        "react-scripts": "5.0.1",
+        "styled-components": "^5.3.6",
+        "typescript": "^4.9.4",
+        "web-vitals": "^2.1.4"
+    },
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "cd backend && npm install && npm run build && cd ../frontend && npm install && npm run build",
-        "start": "node backend/dist/index.js"
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "test": "react-scripts test",
+        "eject": "react-scripts eject"
     },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/phides-code/frankle.git"
+    "eslintConfig": {
+        "extends": [
+            "react-app",
+            "react-app/jest"
+        ]
     },
-    "author": "Philippe DeSousa",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/phides-code/frankle/issues"
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
     },
-    "homepage": "https://github.com/phides-code/frankle#readme"
+    "devDependencies": {
+        "@types/styled-components": "^5.1.26"
+    }
 }
