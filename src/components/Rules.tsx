@@ -11,7 +11,7 @@ const Rules = () => {
                 The word list may include glaring omissions. Send word requests
                 to frankle.wordgame@gmail.com
             </InnerWrapper>
-            <InnerWrapper>Frankle (c) Philippe DeSousa 2022</InnerWrapper>
+            <InnerWrapper>Frankle (c) Philippe DeSousa 2022-2024</InnerWrapper>
         </Wrapper>
     );
 };
