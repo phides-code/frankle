@@ -37,7 +37,6 @@ const MainGrid = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        // if (wordFetchStatus === 'idle' && word.length === 0) {
         if (wordFetchStatus === 'idle' && !word) {
             console.log('fetching word');
             dispatch(fetchWord());
@@ -66,7 +65,7 @@ const MainGrid = () => {
                                 return (
                                     <StyledLetterBox
                                         key={Math.floor(
-                                            Math.random() * 99999999
+                                            Math.random() * 99999999,
                                         )}
                                         bgColor={thisLetterBox.bgColor}
                                         fgColor={thisLetterBox.fgColor}
